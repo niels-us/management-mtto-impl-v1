@@ -1,0 +1,5 @@
+docker.env
+terraform.tfvars
+.terraform
+.terraform.lock.hcl
+terraform-dev.tfstate

@@ -1,0 +1,16 @@
+# Copy this file to terraform.tfvars and fill in the values
+# terraform.tfvars is gitignored — never commit secrets
+
+region     = "us-east-1"
+stage      = "DESA"
+account_id = "" # Your AWS account ID, e.g. 123456789012
+
+# Generate a strong JWT secret:
+# openssl rand -base64 48
+jwt_secret = "REPLACE_WITH_RANDOM_STRING_MIN_32_CHARS"
+
+# RDS master password (min 8 chars, no special chars @/")
+db_password = "REPLACE_WITH_STRONG_PASSWORD"
+
+# Get from https://console.groq.com → API Keys → Create API Key
+groq_api_key = "gsk_REPLACE_WITH_YOUR_GROQ_API_KEY"
