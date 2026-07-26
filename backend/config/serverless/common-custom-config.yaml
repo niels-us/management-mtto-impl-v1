@@ -1,0 +1,94 @@
+# API Gateway environment
+environments:
+  DESA: desa
+  TEST: test
+  PROD: prod
+
+environmentsTags:
+  DESA: DEV
+  TEST: TEST
+  PROD: PROD
+
+# Regions code and abbreviation
+regions:
+  code:
+    DESA: us-east-1
+    # TEST: us-east-1
+    # PROD: us-east-1
+  abrev:
+    DESA: UE1
+    TEST: UE1
+    PROD: UE1
+
+# REPLACE THIS - Your AWS accounts → How to get? → Open AWS Console → Click your profile → "Account ID" → If you have multiple accounts, get the ID of each one
+accounts: 
+  id: 
+    DESA: 940813655782        # Your Account ID DESA (12 digits)
+    TEST: 940813655782      # Your Account ID TEST (12 digits)
+    PROD: 940813655782        # Your Account ID PROD (12 digits)
+  abrev:
+    DESA: MAINT                # Your abbreviation (e.g., MAINT for Maintenance)
+    TEST: MAINT
+    PROD: MAINT
+
+
+
+# REPLACE THIS - Your S3 buckets → How to get? → Open AWS Console → Go to S3 → Create a bucket for each environment (e.g., "ue1ctdesastgmaintenanceapi001" for DESA) → Use those names here
+# For DESA → aws s3 mb s3://ue1ctdesastgmaintenanceapi001 --region us-east-1
+# For TEST → aws s3 mb s3://ue1cttteststgmaintenanceapi001 --region us-east-1
+# For PROD → aws s3 mb s3://ue1ctprodstgmaintenanceapi001 --region us-east-1
+deploymentBucket:
+  DESA: ue1ctdesastgmaintenanceapi001
+  TEST: ue1cttteststgmaintenanceapi001
+  PROD: ue1ctprodstgmaintenanceapi001
+
+# REPLACE THIS - Your IAM roles
+# How to create? AWS Console → IAM → Roles → Create Role
+# Required permissions:
+# logs:* - CloudWatch Logs
+# ssm:GetParameter - Parameter Store (secrets)
+# secretsmanager:GetSecretValue - Secrets Manager
+# rds:* - Access to PostgreSQL/RDS
+# s3:* - Access to S3
+# ses:SendEmail - Sending emails
+# ec2:CreateNetworkInterface - VPC access
+role:
+  DESA: arn:aws:iam::940813655782:role/UE1CTDESASEGIAMROLEMAINTENANCEAPI001
+  TEST: arn:aws:iam::940813655782:role/UE1CTTESTSEGIAMROLEMAINTENANCEAPI001
+  PROD: arn:aws:iam::940813655782:role/UE1CTPRODSEGIAMROLEMAINTENANCEAPI001
+
+# REPLACE THIS - Your Security Groups and Subnets
+# How to get?
+# AWS Console → VPC → Security Groups → Copy "sg-0a2731e91636b6cf8"
+# AWS Console → VPC → Subnets → Find private subnets in your VPC
+# Why 3 subnets? For high availability across different Availability Zones.
+vpc:
+  DESA:
+    securityGroupIds:
+      - sg-XXXXXXXXX
+    subnetIds:
+      - subnet-XXXXXXXXXXX
+      - subnet-XXXXXXXXXXX
+      - subnet-XXXXXXXXXXX
+  TEST:
+    securityGroupIds:
+      - sg-YYYYYYYYY
+    subnetIds:
+      - subnet-YYYYYYYYYYY
+      - subnet-YYYYYYYYYYY
+      - subnet-YYYYYYYYYYY
+  PROD:
+    securityGroupIds:
+      - sg-ZZZZZZZZZ
+    subnetIds:
+      - subnet-ZZZZZZZZZZZ
+      - subnet-ZZZZZZZZZZZ
+      - subnet-ZZZZZZZZZZZ
+
+# Lambda provisioning
+# Impact: Fewer cold starts, but it costs money. You can adjust based on your load.
+provisionedConcurrency:
+  default:
+    DESA: 1
+    TEST: 2
+    PROD: 5

@@ -1,0 +1,13 @@
+#set($errorMessage = $input.path('$.errorMessage'))
+#if($errorMessage && $errorMessage != "null" && $errorMessage != "")
+  #set($status = 500)
+  #if($errorMessage.matches('.*\\"httpStatus\\":400.*')) #set($status = 400) #end
+  #if($errorMessage.matches('.*\\"httpStatus\\":401.*')) #set($status = 401) #end
+  #if($errorMessage.matches('.*\\"httpStatus\\":403.*')) #set($status = 403) #end
+  #if($errorMessage.matches('.*\\"httpStatus\\":404.*')) #set($status = 404) #end
+  #if($errorMessage.matches('.*\\"httpStatus\\":422.*')) #set($status = 422) #end
+  #set($context.responseOverride.status = $status)
+  $errorMessage
+#else
+  $input.json('$')
+#end

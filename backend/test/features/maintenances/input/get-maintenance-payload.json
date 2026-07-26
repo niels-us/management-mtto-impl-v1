@@ -1,0 +1,38 @@
+{
+  "success_payload": {
+    "payload": {}
+  },
+  "empty_list": {
+    "payload": {}
+  },
+  "no_auth": {
+    "payload": {}
+  },
+  "multiple_items": {
+    "payload": {}
+  },
+  "different_customer": {
+    "payload": {}
+  },
+  "pending_status": {
+    "payload": {}
+  },
+  "in_progress_status": {
+    "payload": {}
+  },
+  "completed_status": {
+    "payload": {}
+  },
+  "cancelled_status": {
+    "payload": {}
+  },
+  "all_status": {
+    "payload": {}
+  },
+  "pending_with_single": {
+    "payload": {}
+  },
+  "mixed_case_status": {
+    "payload": {}
+  }
+}

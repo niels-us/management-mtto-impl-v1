@@ -1,0 +1,11 @@
+{
+  "success_payload": {
+    "payload": {}
+  },
+  "empty_vessels": {
+    "payload": {}
+  },
+  "no_auth": {
+    "payload": {}
+  }
+}

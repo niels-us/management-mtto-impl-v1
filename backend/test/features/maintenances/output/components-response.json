@@ -1,0 +1,39 @@
+{
+  "success_payload": [
+    {
+      "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "name": "Main Engine",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-ME-12345",
+      "installedAt": "2020-01-15T08:00:00Z"
+    }
+  ],
+  "empty_components": [],
+  "multiple_items": [
+    {
+      "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "name": "Main Engine",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-ME-12345",
+      "installedAt": "2020-01-15T08:00:00Z"
+    },
+    {
+      "id": "component-002",
+      "name": "Water Pump",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-WP-67890",
+      "installedAt": "2021-06-20T10:30:00Z"
+    },
+    {
+      "id": "component-003",
+      "name": "Propeller System",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-PS-54321",
+      "installedAt": "2019-03-10T14:15:00Z"
+    }
+  ]
+}

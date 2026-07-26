@@ -1,0 +1,62 @@
+{
+  "success_payload": {
+    "path": { "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b" },
+    "payload": {
+      "description": "Engine oil change",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000"
+    }
+  },
+  "missing_description": {
+    "path": { "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b" },
+    "payload": {
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000"
+    }
+  },
+  "missing_scheduled_at": {
+    "path": { "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b" },
+    "payload": {
+      "description": "Engine oil change",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000"
+    }
+  },
+  "missing_created_by": {
+    "path": { "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b" },
+    "payload": {
+      "description": "Engine oil change",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b"
+    }
+  },
+  "no_auth": {
+    "path": { "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b" },
+    "payload": {
+      "description": "Engine oil change",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000"
+    }
+  },
+  "wrong_customer": {
+    "path": { "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b" },
+    "payload": {
+      "description": "Engine oil change",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "customerId": "different-cust",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000"
+    }
+  },
+  "component_not_found": {
+    "path": { "id": "non-existent-component" },
+    "payload": {
+      "description": "Maintenance for missing component",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000"
+    }
+  }
+}

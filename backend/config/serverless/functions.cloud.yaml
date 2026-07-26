@@ -1,0 +1,122 @@
+maintenanceAPI:
+  handler: src/maintenances/infrastructure/bootstrap/App.handler
+  name: ${self:custom.regions.abrev.${opt:stage}}${self:custom.accounts.abrev.${opt:stage}}${opt:stage}COMLMBMAINTENANCEAPI001
+  description: Maintenance API - Gestión de mantenimientos de buques y componentes
+  role: ${self:custom.role.${opt:stage}}
+  events:    
+    - http:
+        path: /V1/auth/login
+        method: post
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/auth-login.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/vessels
+        method: get
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/get-vessels.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/vessels/{id}/components
+        method: get
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/get-vessel-components.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/maintenance/{id}
+        method: delete
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/delete-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/components/{id}/maintenance
+        method: post
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/post-component-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/maintenance
+        method: get
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/get-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/maintenance/{id}
+        method: patch
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/update-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/maintenance/query-ai
+        method: post
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/ai-query.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+    - http:
+        path: /V1/maintenance/ai-health
+        method: get
+        integration: lambda
+        request:
+          template:
+            application/json: ${file(config/serverless/request/ai-health.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+        cors: ${file(config/serverless/http-cors.yaml)}
+        private: true # Requiere API Key para esta ruta
+        
+# Swagger Documentation Handler - Production
+swagger:
+  handler: src/common/infrastructure/swagger/SwaggerHandler.swaggerHandler
+  timeout: 10
+  memorySize: 256
+  description: Swagger UI Documentation
+  role: ${self:custom.role.${opt:stage}}
+  events:
+    - http:
+        path: /swagger
+        method: get
+        cors: ${file(config/serverless/http-cors.yaml)}
+
+# OpenAPI JSON Endpoint - Production
+swaggerJson:
+  handler: src/common/infrastructure/swagger/SwaggerHandler.swaggerJsonHandler
+  timeout: 10
+  memorySize: 256
+  description: OpenAPI Specification JSON
+  role: ${self:custom.role.${opt:stage}}
+  events:
+    - http:
+        path: /swagger.json
+        method: get
+        cors: ${file(config/serverless/http-cors.yaml)}

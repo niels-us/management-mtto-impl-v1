@@ -1,0 +1,26 @@
+{
+  "no_auth": {
+    "message": "Unauthenticated user"
+  },
+  "invalid_token": {
+    "message": "Unauthenticated user"
+  },
+  "missing_component_id": {
+    "message": "componentId, description, scheduledAt, customerId and createdBy are required"
+  },
+  "missing_description": {
+    "message": "componentId, description, scheduledAt, customerId and createdBy are required"
+  },
+  "missing_scheduled_at": {
+    "message": "componentId, description, scheduledAt, customerId and createdBy are required"
+  },
+  "missing_created_by": {
+    "message": "componentId, description, scheduledAt, customerId and createdBy are required"
+  },
+  "wrong_customer": {
+    "message": "Field 'customerId' must be a valid UUID v4. Received: different-cust"
+  },
+  "component_not_found": {
+    "message": "Component not found or access denied"
+  }
+}

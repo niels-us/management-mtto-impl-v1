@@ -1,0 +1,14 @@
+{
+  "success_payload": {
+    "path": { "id": "a9b8c7d6-e5f4-4c3b-8a97-6e5f4d3c2b1a" },
+    "payload": {}
+  },
+  "not_found_payload": {
+    "path": { "id": "ffffffff-ffff-4fff-bfff-ffffffffffff" },
+    "payload": {}
+  },
+  "invalid_id_payload": {
+    "path": { "id": "" },
+    "payload": {}
+  }
+}

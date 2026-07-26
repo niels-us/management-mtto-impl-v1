@@ -1,0 +1,38 @@
+{
+  "success_payload": {
+    "payload": {}
+  },
+  "empty_components": {
+    "payload": {}
+  },
+  "no_auth": {
+    "payload": {}
+  },
+  "multiple_items": {
+    "payload": {}
+  },
+  "different_vessel": {
+    "payload": {}
+  },
+  "no_components": {
+    "payload": {}
+  },
+  "valid_tenant": {
+    "payload": {}
+  },
+  "different_customer": {
+    "payload": {}
+  },
+  "full_fields": {
+    "payload": {}
+  },
+  "invalid_vessel": {
+    "payload": {}
+  },
+  "tenant_protection": {
+    "payload": {}
+  },
+  "single_item": {
+    "payload": {}
+  }
+}

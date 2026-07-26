@@ -1,0 +1,33 @@
+{
+  "success_payload": {
+    "payload": {
+      "username": "tester",
+      "password": "correctPassword"
+    }
+  },
+  "invalid_credentials": {
+    "payload": {
+      "username": "tester",
+      "password": "wrongPassword"
+    }
+  },
+  "user_not_found": {
+    "payload": {
+      "username": "nonexistent",
+      "password": "anyPassword"
+    }
+  },
+  "missing_username": {
+    "payload": {
+      "password": "somePassword"
+    }
+  },
+  "missing_password": {
+    "payload": {
+      "username": "tester"
+    }
+  },
+  "empty_payload": {
+    "payload": {}
+  }
+}

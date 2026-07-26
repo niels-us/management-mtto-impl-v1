@@ -1,0 +1,32 @@
+#define( $loop )
+  #foreach($key in $map.keySet())
+    #set( $k = $util.escapeJavaScript($key) )
+    #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll("\\'", "'") )
+    "$k": "$v"
+    #if( $foreach.hasNext ) , #end
+  #end
+#end
+
+{
+  "origin": "API_GATEWAY_REST_EVENT",
+  "action": "getMaintenance",
+  "payload": $input.json("$"),
+  "headers": {
+    #set( $map = $input.params().header )
+    $loop
+  },
+  "query": {
+    #set( $map = $input.params().querystring )
+    $loop
+  },
+  "path": {
+    #set( $map = $input.params().path )
+    $loop
+  },
+  "authorizer": {
+    "claims": {},
+    "context": {}
+  },
+  "requestPath": "$context.path",
+  "httpMethod": "$context.httpMethod"
+}

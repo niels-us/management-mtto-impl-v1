@@ -1,0 +1,20 @@
+{
+  "invalid_credentials": {
+    "message": "Invalid credentials"
+  },
+  "user_not_found": {
+    "message": "Invalid credentials"
+  },
+  "missing_fields": {
+    "message": "username and password are required"
+  },
+  "missing_password": {
+    "message": "username and password are required"
+  },
+  "empty_payload": {
+    "message": "username and password are required"
+  },
+  "missing_username": {
+    "message": "username and password are required"
+  }
+}

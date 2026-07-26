@@ -1,0 +1,113 @@
+{
+  "success_payload": [
+    {
+      "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "name": "Main Engine",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-ME-12345",
+      "installedAt": "2020-01-15T08:00:00Z"
+    }
+  ],
+  "empty_components": [],
+  "multiple_items": [
+    {
+      "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "name": "Main Engine",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-ME-12345",
+      "installedAt": "2020-01-15T08:00:00Z"
+    },
+    {
+      "id": "component-002",
+      "name": "Water Pump",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-WP-67890",
+      "installedAt": "2021-06-20T10:30:00Z"
+    },
+    {
+      "id": "component-003",
+      "name": "Propeller System",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-PS-54321",
+      "installedAt": "2019-03-10T14:15:00Z"
+    }
+  ],
+  "vessel_002_components": [
+    {
+      "id": "component-004",
+      "name": "Radar System",
+      "vesselId": "d6c5b4a3-f2e1-4d9c-8b7a-6f5e4d3c2b1a",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-RS-11111",
+      "installedAt": "2022-05-25T09:45:00Z"
+    },
+    {
+      "id": "component-005",
+      "name": "Navigation System",
+      "vesselId": "d6c5b4a3-f2e1-4d9c-8b7a-6f5e4d3c2b1a",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-NS-22222",
+      "installedAt": "2022-05-25T10:00:00Z"
+    }
+  ],
+  "tenant_validated_components": [
+    {
+      "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "name": "Main Engine",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-ME-12345",
+      "installedAt": "2020-01-15T08:00:00Z"
+    },
+    {
+      "id": "component-002",
+      "name": "Water Pump",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-WP-67890",
+      "installedAt": "2021-06-20T10:30:00Z"
+    }
+  ],
+  "components_with_full_fields": [
+    {
+      "id": "comp-full-001",
+      "name": "Fuel System",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-FS-99999",
+      "installedAt": "2020-12-01T12:00:00Z"
+    },
+    {
+      "id": "comp-full-002",
+      "name": "Electrical Panel",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-EP-88888",
+      "installedAt": "2021-01-15T11:30:00Z"
+    }
+  ],
+  "tenant_protected_components": [
+    {
+      "id": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "name": "Main Engine",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-ME-12345",
+      "installedAt": "2020-01-15T08:00:00Z"
+    }
+  ],
+  "single_component": [
+    {
+      "id": "component-single-001",
+      "name": "Anchor System",
+      "vesselId": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "serialNumber": "SN-AS-77777",
+      "installedAt": "2020-06-10T15:20:00Z"
+    }
+  ]
+}

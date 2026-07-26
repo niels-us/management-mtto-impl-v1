@@ -1,0 +1,25 @@
+{
+  "italian_question": {
+    "payload": {
+      "question": "Elenca le mie imbarcazioni"
+    }
+  },
+  "english_question": {
+    "payload": {
+      "question": "List all my pending maintenances"
+    }
+  },
+  "no_question": {
+    "payload": {}
+  },
+  "short_question": {
+    "payload": {
+      "question": "Hi"
+    }
+  },
+  "long_question": {
+    "payload": {
+      "question": "This is a very long question that exceeds the maximum allowed length of five hundred characters. We need to make sure that the validation system catches this and returns an appropriate error message to the user. The system should validate the question length before sending it to the LLM provider. Adding more text here to make absolutely sure we exceed the 500 character limit for this test scenario in the maintenance API application."
+    }
+  }
+}

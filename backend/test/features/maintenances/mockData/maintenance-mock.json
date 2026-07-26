@@ -1,0 +1,173 @@
+{
+  "success_payload": {
+    "id": "maint-001",
+    "componentId": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+    "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+    "description": "Engine oil change",
+    "status": "pending",
+    "scheduledAt": "2026-04-15T10:00:00Z",
+    "createdBy": "550e8400-e29b-41d4-a716-446655440000",
+    "createdAt": "2026-03-27T01:30:00Z",
+    "updatedAt": "2026-03-27T01:30:00Z"
+  },
+  "in_progress_payload": {
+    "id": "maint-001",
+    "componentId": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+    "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+    "description": "Engine oil change",
+    "status": "in_progress",
+    "scheduledAt": "2026-04-15T10:00:00Z",
+    "createdBy": "550e8400-e29b-41d4-a716-446655440000",
+    "createdAt": "2026-03-27T01:30:00Z",
+    "updatedAt": "2026-03-28T09:00:00Z"
+  },
+  "component_not_found": null,
+  "success_payload_get": [
+    {
+      "id": "maint-001",
+      "componentId": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Engine oil change",
+      "status": "pending",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000",
+      "createdAt": "2026-03-27T01:30:00Z",
+      "updatedAt": "2026-03-27T01:30:00Z"
+    }
+  ],
+  "empty_list": [],
+  "multiple_items": [
+    {
+      "id": "maint-001",
+      "componentId": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Engine oil change",
+      "status": "pending",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000",
+      "createdAt": "2026-03-27T01:30:00Z",
+      "updatedAt": "2026-03-27T01:30:00Z"
+    },
+    {
+      "id": "maint-002",
+      "componentId": "component-002",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Propeller inspection",
+      "status": "in_progress",
+      "scheduledAt": "2026-05-20T14:00:00Z",
+      "createdBy": "user-456",
+      "createdAt": "2026-03-20T10:15:00Z",
+      "updatedAt": "2026-03-25T09:45:00Z"
+    },
+    {
+      "id": "maint-003",
+      "componentId": "component-003",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Radar system update",
+      "status": "completed",
+      "scheduledAt": "2026-03-25T08:00:00Z",
+      "createdBy": "user-789",
+      "createdAt": "2026-03-10T16:20:00Z",
+      "updatedAt": "2026-03-25T17:00:00Z"
+    }
+  ],
+  "pending_status_items": [
+    {
+      "id": "maint-001",
+      "componentId": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Engine oil change",
+      "status": "pending",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000",
+      "createdAt": "2026-03-27T01:30:00Z",
+      "updatedAt": "2026-03-27T01:30:00Z"
+    },
+    {
+      "id": "maint-004",
+      "componentId": "component-004",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Hull inspection",
+      "status": "pending",
+      "scheduledAt": "2026-04-20T11:30:00Z",
+      "createdBy": "user-321",
+      "createdAt": "2026-03-26T14:20:00Z",
+      "updatedAt": "2026-03-26T14:20:00Z"
+    }
+  ],
+  "in_progress_status_items": [
+    {
+      "id": "maint-002",
+      "componentId": "component-002",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Propeller inspection",
+      "status": "in_progress",
+      "scheduledAt": "2026-05-20T14:00:00Z",
+      "createdBy": "user-456",
+      "createdAt": "2026-03-20T10:15:00Z",
+      "updatedAt": "2026-03-25T09:45:00Z"
+    },
+    {
+      "id": "maint-005",
+      "componentId": "component-005",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Engine maintenance",
+      "status": "in_progress",
+      "scheduledAt": "2026-05-10T09:00:00Z",
+      "createdBy": "user-654",
+      "createdAt": "2026-03-22T08:30:00Z",
+      "updatedAt": "2026-03-24T16:45:00Z"
+    }
+  ],
+  "completed_status_items": [
+    {
+      "id": "maint-003",
+      "componentId": "component-003",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Radar system update",
+      "status": "completed",
+      "scheduledAt": "2026-03-25T08:00:00Z",
+      "createdBy": "user-789",
+      "createdAt": "2026-03-10T16:20:00Z",
+      "updatedAt": "2026-03-25T17:00:00Z"
+    },
+    {
+      "id": "maint-006",
+      "componentId": "component-006",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Electrical system check",
+      "status": "completed",
+      "scheduledAt": "2026-03-20T12:00:00Z",
+      "createdBy": "user-987",
+      "createdAt": "2026-03-05T09:15:00Z",
+      "updatedAt": "2026-03-20T15:30:00Z"
+    }
+  ],
+  "cancelled_status_items": [
+    {
+      "id": "maint-007",
+      "componentId": "component-007",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Paint job cancelled",
+      "status": "cancelled",
+      "scheduledAt": "2026-06-30T13:00:00Z",
+      "createdBy": "user-111",
+      "createdAt": "2026-03-15T10:00:00Z",
+      "updatedAt": "2026-03-26T11:20:00Z"
+    }
+  ],
+  "single_pending_item": [
+    {
+      "id": "maint-001",
+      "componentId": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "description": "Engine oil change",
+      "status": "pending",
+      "scheduledAt": "2026-04-15T10:00:00Z",
+      "createdBy": "550e8400-e29b-41d4-a716-446655440000",
+      "createdAt": "2026-03-27T01:30:00Z",
+      "updatedAt": "2026-03-27T01:30:00Z"
+    }
+  ]
+}
+

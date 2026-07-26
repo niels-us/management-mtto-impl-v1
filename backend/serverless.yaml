@@ -1,0 +1,105 @@
+service: maintenance-api
+
+frameworkVersion: '3'
+configValidationMode: error
+deprecationNotificationMode: error
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage,'DESA'}
+  region: ${self:custom.regions.code.${opt:stage}}
+  timeout: 30
+  memorySize: 512
+  versionFunctions: false
+  logRetentionInDays: 30
+  architecture: arm64
+
+  tracing:
+    lambda: true
+
+  apiGateway:
+    apiKeySourceType: HEADER
+    apiKeys:
+      - name: maintenanceApiKey
+        description: API Key for Maintenance API
+
+  deploymentBucket:
+    name: ${self:custom.deploymentBucket.${opt:stage}}
+    serverSideEncryption: AES256
+
+  tags:
+    FOCODAMB: ${self:custom.environmentsTags.${opt:stage}}
+    FOCODAPP: MAINTENANCEAPI
+    Environment: ${self:provider.stage}
+    Project: MaintenanceAPI
+    ManagedBy: Serverless
+
+  stackTags:
+    FOCODAMB: ${self:custom.environmentsTags.${opt:stage}}
+    FOCODAPP: MAINTENANCEAPI
+    Environment: ${self:provider.stage}
+
+  environment:
+    REGION: ${self:provider.region}
+    STAGE: ${self:provider.stage}
+    LOG_LEVEL: ${self:custom.logLevel.${opt:stage}, 'INFO'}
+    NODE_ENV: ${self:provider.stage}
+    SERVICE_NAME: maintenance-api    
+    # Database (from Secrets Manager/Parameter Store)
+    # POSTGRESQL_CREDENTIALS: "{{resolve:ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS}}"
+    POSTGRESQL_CREDENTIALS: ${env:POSTGRESQL_CREDENTIALS, ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS, '{"host":"localhost","port":5432,"database":"postgres","user":"postgres","password":"postgres","max":10,"idleTimeoutMillis":30000,"connectionTimeoutMillis":2000}'}    
+    # JWT
+    # JWT_SECRET: "{{resolve:ssm:${self:custom.ssmRootPath}/JWT_SECRET}}"
+    JWT_SECRET: ${env:JWT_SECRET, ssm:${self:custom.ssmRootPath}/JWT_SECRET, 'xK8mP2nR5vY9bC3fG6jL1oQ4sU7wZ0aD2eH5tM8pR1vY4cF7jL9oQ2sU5wX8zA='}
+    JWT_AUDIENCE: 'maintenance-api'
+    JWT_ISSUER: 'maintenance-api-issuer'
+    JWT_EXPIRATION: '24h'
+    # Groq LLM Configuration (AI Feature)
+    # GROQ_API_KEY: "{{resolve:ssm:${self:custom.ssmRootPath}/GROQ_API_KEY}}"
+    GROQ_API_KEY: ${env:GROQ_API_KEY, ssm:${self:custom.ssmRootPath}/GROQ_API_KEY, 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'}
+    # Configurar con tu API Key de Groq desde https://console.groq.com
+
+custom:
+  functionsFile: ${param:functionsFile, 'cloud'}
+  
+  # Load from common-custom-config.yaml
+  accounts: ${file(./config/serverless/common-custom-config.yaml):accounts}
+  accountId: ${self:custom.accounts.id.${opt:stage}}
+  role: ${file(./config/serverless/common-custom-config.yaml):role}
+  vpc: ${file(./config/serverless/common-custom-config.yaml):vpc}
+  deploymentBucket: ${file(./config/serverless/common-custom-config.yaml):deploymentBucket}
+  environmentsTags: ${file(./config/serverless/common-custom-config.yaml):environmentsTags}
+  regions: ${file(./config/serverless/common-custom-config.yaml):regions}
+  provisionedConcurrency: ${file(./config/serverless/common-custom-config.yaml):provisionedConcurrency}
+  # Service naming
+  serviceName: ${self:custom.regions.abrev.${opt:stage}}${self:custom.accounts.abrev.${opt:stage}}${opt:stage}MTOMAINTENANCEAPI
+  
+  # SSM configuration
+  ssmName: MAINTENANCE-API
+  ssmRootPath: /${self:custom.ssmName}/${self:provider.stage}
+  
+  # Log levels per environment
+  logLevel:
+    DESA: DEBUG
+    TEST: INFO
+    PROD: INFO
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+
+package:
+  individually: true
+  patterns:
+    - src/**
+    - node_modules/**    
+    - openapi.json
+    - '!coverage/**'
+    - '!test/**'
+    - '!jest.*'
+    - '!**/*.test.ts'
+    - '!**/*.spec.ts'
+    - '!node_modules/.bin/**'
+
+functions: ${file(config/serverless/functions.${self:custom.functionsFile}.yaml)}

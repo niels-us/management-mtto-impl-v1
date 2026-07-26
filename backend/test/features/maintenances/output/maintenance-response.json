@@ -1,0 +1,13 @@
+{
+  "success_payload": {
+    "id": "a9b8c7d6-e5f4-4c3b-8a97-6e5f4d3c2b1a",
+    "componentId": "c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b",
+    "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+    "description": "Engine oil change",
+    "status": "pending",
+    "scheduledAt": "2026-04-15T10:00:00Z",
+    "createdBy": "550e8400-e29b-41d4-a716-446655440000",
+    "createdAt": "2026-03-27T01:30:00Z",
+    "updatedAt": "2026-03-27T01:30:00Z"
+  }
+}

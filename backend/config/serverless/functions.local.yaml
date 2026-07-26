@@ -1,0 +1,113 @@
+maintenances:
+  handler: src/maintenances/infrastructure/bootstrap/App.handler
+  events:
+    - http:
+        path: /V1/auth/login
+        method: post
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/auth-login.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    - http:
+        path: /V1/vessels
+        method: get
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/get-vessels.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    - http:
+        path: /V1/vessels/{id}/components
+        method: get
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/get-vessel-components.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    - http:
+        path: /V1/components/{id}/maintenance
+        method: post
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/post-component-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    - http:
+        path: /V1/maintenance
+        method: get
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/get-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    - http:
+        path: /V1/maintenance/{id}
+        method: patch
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/update-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    - http:
+        path: /V1/maintenance/{id}
+        method: delete
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/delete-maintenance.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    # AI Query Endpoints (NUEVA FEATURE)
+    - http:
+        path: /V1/maintenance/query-ai
+        method: post
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/ai-query.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+    - http:
+        path: /V1/maintenance/ai-health
+        method: get
+        integration: lambda
+        cors: ${file(config/serverless/http-cors.yaml)}
+        request:
+          template:
+            application/json: ${file(config/serverless/request/ai-health.vm)}
+        response: ${file(config/serverless/http-response.yaml)}
+
+  timeout: 900
+
+# Swagger Documentation Handler
+swagger:
+  handler: src/common/infrastructure/swagger/SwaggerHandler.swaggerHandler
+  timeout: 10
+  memorySize: 256
+  description: Swagger UI Documentation
+  
+  events:
+    - http:
+        path: swagger
+        method: get
+        cors: ${file(config/serverless/http-cors.yaml)}
+
+# OpenAPI JSON Endpoint
+swaggerJson:
+  handler: src/common/infrastructure/swagger/SwaggerHandler.swaggerJsonHandler
+  timeout: 10
+  memorySize: 256
+  description: OpenAPI Specification JSON
+  
+  events:
+    - http:
+        path: swagger.json
+        method: get
+        cors: ${file(config/serverless/http-cors.yaml)}

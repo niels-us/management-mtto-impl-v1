@@ -1,0 +1,17 @@
+{
+  "success_payload": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "username": "tester",
+    "passwordHash": "$2b$10$g5VDhHpKmfMcUxhMvCEPeub4C1pAGBKYfU8vBsI8HhQY6rH6Lp8nq",
+    "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+    "role": "admin"
+  },
+  "invalid_credentials": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "username": "tester",
+    "passwordHash": "$2b$10$GbTVvHwLJMvCHVxGPkCPe.7U3J8Dt6H7xYLKhKF5eVXqZ5VxKR7wO",
+    "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+    "role": "admin"
+  },
+  "user_not_found": null
+}

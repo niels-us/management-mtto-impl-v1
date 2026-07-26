@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mtto-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mtto-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mtto-app
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - docker.env
+    # environment:
+    #   STAGEX: XXX
+    volumes:
+      - ./src:/app/src
+      - ./serverless.yaml:/app/serverless.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:3000/DESA/swagger.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - mtto-network
+
+volumes:
+  pgdata:
+
+networks:
+  mtto-network:
+    driver: bridge

@@ -1,0 +1,910 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Maintenance API",
+    "description": "API for managing vessel and component maintenance. Multi-tenant system with JWT authentication.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Kepler Srl",
+      "email": "support@kepler.com"
+    },
+    "license": {
+      "name": "Copyright (c) Kepler Srl"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/DESA",
+      "description": "Local Development"
+    },
+    {
+      "url": "https://api.example.com/DESA",
+      "description": "Development Environment (AWS)"
+    },
+    {
+      "url": "https://api.example.com/TEST",
+      "description": "Testing Environment (AWS)"
+    },
+    {
+      "url": "https://api.example.com/PROD",
+      "description": "Production Environment (AWS)"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT token obtained from the /V1/auth/login endpoint"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API Key required by API Gateway for protected endpoints"
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "user1",
+            "description": "Username"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "hash1",
+            "description": "User password"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "JWT token for authentication in subsequent requests"
+          }
+        }
+      },
+      "Vessel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique vessel ID"
+          },
+          "name": {
+            "type": "string",
+            "example": "MV Pacific Explorer",
+            "description": "Vessel name"
+          },
+          "registrationNumber": {
+            "type": "string",
+            "example": "IMO-1234567",
+            "description": "Vessel registration number"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Owner tenant/customer ID"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fecha de creación"
+          }
+        }
+      },
+      "Component": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique component ID"
+          },
+          "name": {
+            "type": "string",
+            "example": "Engine Overhaul Kit",
+            "description": "Component name"
+          },
+          "vesselId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the vessel it belongs to"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Tenant/customer ID"
+          },
+          "serialNumber": {
+            "type": "string",
+            "example": "SN-2024-001",
+            "description": "Component serial number"
+          },
+          "installedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Installation date"
+          }
+        }
+      },
+      "CreateMaintenanceRequest": {
+        "type": "object",
+        "required": [
+          "description",
+          "scheduledAt",
+          "customerId",
+          "createdBy"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Oil and filter change",
+            "description": "Maintenance description"
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-04-15T10:30:00Z",
+            "description": "Scheduled maintenance date and time (ISO 8601)"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Tenant/customer ID"
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the user who created the maintenance"
+          }
+        }
+      },
+      "Maintenance": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique maintenance ID"
+          },
+          "componentId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the maintained component"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Tenant/customer ID"
+          },
+          "description": {
+            "type": "string",
+            "description": "Maintenance description"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "in_progress",
+              "completed",
+              "cancelled"
+            ],
+            "description": "Maintenance status"
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Scheduled date"
+          },
+          "performedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Completion date"
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the user who created the maintenance"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update"
+          }
+        }
+      },
+      "UpdateMaintenanceRequest": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "in_progress",
+              "completed",
+              "cancelled"
+            ],
+            "example": "in_progress",
+            "description": "New maintenance status"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "ERROR_001"
+          },
+          "message": {
+            "type": "string",
+            "example": "Something went wrong"
+          }
+        }
+      },
+      "AIQueryRequest": {
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "properties": {
+          "question": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500,
+            "example": "What maintenance does Vessel-A have pending?",
+            "description": "Natural language question about maintenance records, components, or vessels"
+          }
+        }
+      },
+      "AIQueryResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true,
+            "description": "Indicates if the query was processed successfully"
+          },
+          "question": {
+            "type": "string",
+            "example": "What maintenance does Vessel-A have pending?",
+            "description": "The original question asked by the user"
+          },
+          "answer": {
+            "type": "string",
+            "example": "El Vessel-A tiene 3 mantenimientos pendientes: Motor Principal (20/04), Bomba Hidráulica (25/04), Sistema Eléctrico (28/04)",
+            "description": "AI-generated response based on database context"
+          },
+          "dataSource": {
+            "type": "string",
+            "enum": [
+              "database",
+              "cache",
+              "error"
+            ],
+            "example": "database",
+            "description": "Source of the response"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-03-28T10:30:00Z",
+            "description": "Timestamp when the response was generated"
+          },
+          "processingTimeMs": {
+            "type": "integer",
+            "example": 2450,
+            "description": "Time taken to process the query in milliseconds"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true,
+            "example": null,
+            "description": "Error message if processing failed"
+          }
+        }
+      },
+      "AIHealthCheckResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok",
+            "description": "Health status of the service"
+          },
+          "aiServiceAvailable": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the AI service (Groq LLM) is available"
+          },
+          "provider": {
+            "type": "string",
+            "example": "Groq LLM Provider",
+            "description": "Name of the LLM provider being used"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": [],
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/V1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication(Utente)"
+        ],
+        "summary": "User login",
+        "description": "autenticazione utente, restituzione token JWT",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/V1/vessels": {
+      "get": {
+        "tags": [
+          "Vessels(imbarcazioni)"
+        ],
+        "summary": "Get all vessels",
+        "description": "Restituisce l'elenco delle imbarcazioni per il cliente autenticato (multi-tenant)",
+        "security": [
+          {
+            "BearerAuth": [],
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of vessels",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vessel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or expired JWT token"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/V1/vessels/{id}/components": {
+      "get": {
+        "tags": [
+          "Components(Componente)"
+        ],
+        "summary": "Get vessel components",
+        "description": "Elenco componenti di una specifica imbarcazione",        
+        "security": [
+          {
+            "BearerAuth": [],
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Vessel ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of components",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Component"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado"
+          },
+          "403": {
+            "description": "Access denied - The vessel does not belong to your tenant"
+          },
+          "404": {
+            "description": "Vessel not found"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/V1/components/{id}/maintenance": {
+      "post": {
+        "tags": [
+          "Maintenance(Manutenzione)"
+        ],
+        "summary": "Create new maintenance",
+        "description": "Creazione di una manutenzione su un componente",        
+        "security": [
+          {
+            "BearerAuth": [],
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Component ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMaintenanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Maintenance created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maintenance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data or component not found"
+          },
+          "401": {
+            "description": "No autorizado"
+          },
+          "403": {
+            "description": "Access denied - Attempt to create maintenance for another tenant"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/V1/maintenance": {
+      "get": {
+        "tags": [
+          "Maintenance(Manutenzione)"
+        ],
+        "summary": "Get maintenance records",
+        "description": "Elenco manutenzioni (filtrate per tenant) con filtri stato opzionali",
+        "security": [
+          {
+            "BearerAuth": [],
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "in_progress",
+                "completed",
+                "cancelled"
+              ]
+            },
+            "description": "Filter by maintenance status"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of maintenance records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Maintenance"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/V1/maintenance/{id}": {
+      "patch": {
+        "tags": [
+          "Maintenance(Manutenzione)"
+        ],
+        "summary": "Update maintenance status",
+        "description": "Aggiornamento dello stato di una manutenzione . Stati validi: pending, in_progress, completed, cancelled",
+        "security": [
+          {
+            "BearerAuth": [],
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Maintenance ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMaintenanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Maintenance updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maintenance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status or incorrect data"
+          },
+          "401": {
+            "description": "No autorizado"
+          },
+          "403": {
+            "description": "Access denied - The maintenance does not belong to your tenant"
+          },
+          "404": {
+            "description": "Maintenance not found"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Maintenance(Manutenzione)"
+        ],
+        "summary": "Delete a maintenance record",
+        "description": "Elimina una manutenzione per ID. Solo il tenant proprietario può eliminare il record.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Maintenance ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Maintenance deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Maintenance deleted successfully"
+                    },
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "a9b8c7d6-e5f4-4c3b-8a97-6e5f4d3c2b1a"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid maintenance ID format"
+          },
+          "401": {
+            "description": "No autorizado"
+          },
+          "403": {
+            "description": "Access denied - The maintenance does not belong to your tenant"
+          },
+          "404": {
+            "description": "Maintenance not found"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": [],
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/V1/maintenance/query-ai": {
+      "post": {
+        "tags": [
+          "AI Query LLM"
+        ],
+        "summary": "Query maintenance data using natural language",
+        "description": "Process natural language queries about maintenance history, components, and vessels using artificial intelligence (Groq LLM). Requires JWT authentication. Each query is processed with automatic multi-tenant isolation: customers see only their own data.",
+        "operationId": "queryAI",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AIQueryRequest"
+              },
+              "examples": {
+                "example1": {
+                  "summary": "List vessels",
+                  "value": {
+                    "question": "Elenca le mie imbarcazioni"
+                  }
+                },
+                "example2": {
+                  "summary": "Maintenance history",
+                  "value": {
+                    "question": "What is the maintenance history of the Main Engine?"
+                  }
+                },
+                "example3": {
+                  "summary": "Pending maintenance",
+                  "value": {
+                    "question": "What maintenance does Vessel-A have pending?"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Query processed successfully by AI",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIQueryResponse"
+                },
+                "example": {
+                  "success": true,
+                  "question": "What maintenance does Vessel-A have pending?",
+                  "answer": "El Vessel-A tiene 3 mantenimientos pendientes:\n1) Motor Principal - Revisión programada para 20/04/2026\n2) Bomba Hidráulica - Reemplazo programado para 25/04/2026\n3) Sistema Eléctrico - Inspección programada para 28/04/2026",
+                  "dataSource": "database",
+                  "timestamp": "2026-03-28T10:30:00Z",
+                  "processingTimeMs": 2145
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request: question too short (<3 chars), too long (>500 chars), or missing",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": false,
+                  "error": "Validation failed: Question must have at least 3 characters"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "AUTH001",
+                  "message": "Usuario no autenticado"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error or database error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": false,
+                  "error": "Internal server error",
+                  "dataSource": "error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "AI service returned an empty or invalid response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "AI_002",
+                  "message": "Empty response from AI service"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AI service unavailable: GROQ_API_KEY not configured or retry attempts exhausted",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "AI_001",
+                  "message": "AI service is not available. Verify GROQ_API_KEY configuration."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": [],
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/V1/maintenance/ai-health": {
+      "get": {
+        "tags": [
+          "AI Query LLM"
+        ],
+        "summary": "Check AI service health",
+        "description": "Verify that the Groq LLM provider is configured correctly and available. Useful for testing before making queries.",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "AI service is healthy and ready",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIHealthCheckResponse"
+                },
+                "example": {
+                  "status": "ok",
+                  "aiServiceAvailable": true,
+                  "provider": "Groq LLM Provider"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "AUTH001",
+                  "message": "Usuario no autenticado"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error checking service health",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "aiServiceAvailable": false,
+                  "provider": "Groq LLM Provider"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": [],
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    }
+  }
+}

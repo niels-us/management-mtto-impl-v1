@@ -1,0 +1,8 @@
+{
+  "no_auth": {
+    "message": "Unauthenticated user"
+  },
+  "invalid_token": {
+    "message": "Unauthenticated user"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "success_payload": [
+    {
+      "id": "061658b9-bf29-4e88-b0ec-c92ff540ac99",
+      "name": "Maritime Princess",
+      "registrationNumber": "MP-001",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "d6c5b4a3-f2e1-4d9c-8b7a-6f5e4d3c2b1a",
+      "name": "Ocean Voyager",
+      "registrationNumber": "OV-002",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdAt": "2024-02-20T14:30:00Z"
+    },
+    {
+      "id": "vessel-003",
+      "name": "Seas Explorer",
+      "registrationNumber": "SE-003",
+      "customerId": "88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b",
+      "createdAt": "2024-03-10T09:15:00Z"
+    }
+  ],
+  "empty_vessels": []
+}
