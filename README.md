@@ -57,7 +57,7 @@ Create `docker.env` in the project root (not versioned):
 
 ```env
 POSTGRESQL_CREDENTIALS='{"host":"mtto-db","port":5432,"database":"postgres","user":"postgres","password":"postgres","max":10,"idleTimeoutMillis":30000,"connectionTimeoutMillis":2000}'
-JWT_SECRET='xK8mP2nR5vY9bC3fG6jL1oQ4sU7wZ0aD2eH5tM8pR1vY4cF7jL9oQ2sU5wX8zA='
+JWT_SECRET='<segreto-jwt-sicuro>'
 GROQ_API_KEY='<your-groq-api-key>'
 ```
 
