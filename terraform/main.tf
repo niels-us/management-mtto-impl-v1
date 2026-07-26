@@ -9,13 +9,12 @@ terraform {
   }
 
   backend "local" {
-#    path = "terraform.tfstate"
     path = "terraform-dev.tfstate"
   }
 }
 
 provider "aws" {
-  region = var.region
+  region  = var.region
   profile = var.aws_profile
 
   default_tags {
@@ -29,15 +28,24 @@ provider "aws" {
   }
 }
 
-# Reference the default VPC — no cost, already exists in every AWS account
-data "aws_vpc" "default" {
-  default = true
+module "backend" {
+  source = "./modules/backend"
+
+  region      = var.region
+  stage       = var.stage
+  account_id  = var.account_id
+  db_name     = var.db_name
+  db_username = var.db_username
+  db_password = var.db_password
+  jwt_secret  = var.jwt_secret
+  groq_api_key = var.groq_api_key
 }
 
-# Reference default subnets for the default VPC
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
+module "frontend" {
+  source = "./modules/frontend"
+
+  stage                   = var.stage
+  account_id              = var.account_id
+  frontend_domain         = var.frontend_domain
+  frontend_certificate_arn = var.frontend_certificate_arn
 }

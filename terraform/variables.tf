@@ -52,6 +52,21 @@ variable "db_username" {
 }
 
 variable "aws_profile" {
-  type    = string
-  default = "rel"
+  description = "AWS CLI profile name"
+  type        = string
+  default     = "rel"
+}
+
+# ── Frontend ──
+
+variable "frontend_domain" {
+  description = "Custom domain for CloudFront (e.g., app.example.com). Leave empty to use default cloudfront.net domain"
+  type        = string
+  default     = ""
+}
+
+variable "frontend_certificate_arn" {
+  description = "ACM certificate ARN in us-east-1 for the custom domain. Required if frontend_domain is set"
+  type        = string
+  default     = ""
 }

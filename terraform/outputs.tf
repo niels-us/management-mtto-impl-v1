@@ -1,45 +1,71 @@
 output "rds_endpoint" {
   description = "RDS PostgreSQL endpoint (host). Use this to verify connection."
-  value       = aws_db_instance.postgres.address
+  value       = module.backend.rds_endpoint
 }
 
 output "rds_port" {
   description = "RDS PostgreSQL port"
-  value       = aws_db_instance.postgres.port
+  value       = module.backend.rds_port
 }
 
 output "iam_role_arn" {
   description = "IAM Role ARN for Lambda. Paste this in config/serverless/common-custom-config.yaml under role.DESA"
-  value       = aws_iam_role.lambda_exec.arn
+  value       = module.backend.iam_role_arn
 }
 
 output "s3_deployment_bucket" {
   description = "S3 bucket name for Serverless Framework deployments"
-  value       = aws_s3_bucket.deployment.id
+  value       = module.backend.s3_deployment_bucket
 }
 
 output "ssm_postgresql_path" {
   description = "SSM path for PostgreSQL credentials"
-  value       = aws_ssm_parameter.postgresql_credentials.name
+  value       = module.backend.ssm_postgresql_path
+}
+
+output "frontend_bucket_name" {
+  description = "S3 bucket name for frontend hosting. Use this in CI/CD to sync built files"
+  value       = module.frontend.bucket_name
+}
+
+output "cloudfront_domain_name" {
+  description = "CloudFront distribution domain name. Access the frontend at this URL"
+  value       = module.frontend.cloudfront_domain_name
+}
+
+output "cloudfront_distribution_id" {
+  description = "CloudFront distribution ID. Use this for invalidations in CI/CD"
+  value       = module.frontend.cloudfront_distribution_id
 }
 
 output "next_steps" {
   description = "Steps to complete deployment after terraform apply"
   value       = <<-EOT
     1. Run init.sql on RDS:
-       PGPASSWORD=<db_password> psql -h ${aws_db_instance.postgres.address} -U postgres -d kfinder -f init.sql
+       PGPASSWORD=<db_password> psql -h ${module.backend.rds_endpoint} -U postgres -d kfinder -f init.sql
 
     2. Update serverless.yaml — uncomment SSM references:
-       JWT_SECRET:               ${aws_ssm_parameter.jwt_secret.name}
-       POSTGRESQL_CREDENTIALS:  ${aws_ssm_parameter.postgresql_credentials.name}
-       GROQ_API_KEY:             ${aws_ssm_parameter.groq_api_key.name}
+       JWT_SECRET:               ${module.backend.ssm_jwt_secret_path}
+       POSTGRESQL_CREDENTIALS:  ${module.backend.ssm_postgresql_path}
+       GROQ_API_KEY:             ${module.backend.ssm_groq_api_key_path}
 
     3. Update config/serverless/common-custom-config.yaml:
-       role.DESA: ${aws_iam_role.lambda_exec.arn}
+       role.DESA: ${module.backend.iam_role_arn}
        Remove vpc.DESA block (Lambda runs without VPC)
 
-    4. Deploy:
+    4. Deploy backend:
+       npm run build && serverless deploy --stage DESA --region us-east-1
+
+    5. Deploy frontend code to S3 (infra already created):
+       cd ../frontend
        npm run build
-       serverless deploy --stage DESA --region us-east-1
+       aws s3 sync dist/ s3://${module.frontend.bucket_name}/ --delete
+
+    6. (Optional) Invalidate CloudFront cache after frontend deploy:
+       aws cloudfront create-invalidation \\
+         --distribution-id ${module.frontend.cloudfront_distribution_id} \\
+         --paths "/*"
+
+    ─── Frontend URL: https://${module.frontend.cloudfront_domain_name}
   EOT
 }
