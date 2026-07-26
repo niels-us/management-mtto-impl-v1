@@ -1,10 +1,10 @@
 # Maintenance Fleet Manager (MTTO)
 
-Sistema de gestión de mantenimiento para flotas navales. Compuesto por un backend serverless en AWS Lambda y un frontend React desplegado en S3 + CloudFront, con infraestructura gestionada via Terraform.
+Fleet maintenance management system. Composed of a serverless backend on AWS Lambda and a React frontend deployed on S3 + CloudFront, with infrastructure managed via Terraform.
 
 ---
 
-## Arquitectura
+## Architecture
 
 ```
 ┌──────────────┐     ┌──────────────────────────────────┐
@@ -13,70 +13,70 @@ Sistema de gestión de mantenimiento para flotas navales. Compuesto por un backe
 │  S3 + CF     │     │  Serverless Framework             │
 └──────────────┘     └──────────────────────────────────┘
                             ┌──────────────────┐
-                            │   Infraestructura │
-                            │   Terraform       │
-                            │   RDS + S3 + IAM  │
+                            │  Infrastructure   │
+                            │  Terraform        │
+                            │  RDS + S3 + IAM   │
                             └──────────────────┘
 ```
 
-| Componente | Tecnología | Despliegue |
+| Component | Tech Stack | Deployment |
 |---|---|---|
 | **Frontend** | React 19, Vite 8, TypeScript 6, Tailwind 4 | S3 + CloudFront |
 | **Backend** | Node.js 20, TypeScript 5, NestJS 10, Serverless 3 | Lambda + API Gateway |
-| **Base de datos** | PostgreSQL 15 (RDS) | Terraform |
-| **Infraestructura** | Terraform 1.5+ | `terraform apply` |
+| **Database** | PostgreSQL 15 (RDS) | Terraform |
+| **Infrastructure** | Terraform 1.5+ | `terraform apply` |
 
 ---
 
-## Requisitos
+## Prerequisites
 
-- **Docker** y **Docker Compose** (desarrollo local)
-- **Node.js** >= 20 (solo si no usas Docker)
-- **AWS CLI** configurado (deploy)
-- **Terraform** >= 1.5 (infraestructura)
+- **Docker** and **Docker Compose** (local development)
+- **Node.js** >= 20 (only if not using Docker)
+- **AWS CLI** configured (deployment)
+- **Terraform** >= 1.5 (infrastructure)
 
 ---
 
-## Desarrollo Local
+## Local Development
 
-Levanta todo el stack con un solo comando:
+Start the entire stack with a single command:
 
 ```bash
 docker compose up -d
 ```
 
-| Servicio | URL |
+| Service | URL |
 |---|---|
 | Frontend | http://localhost:8080 |
 | Backend API | http://localhost:3000/DESA/swagger.json |
 | PostgreSQL | localhost:5432 (user: postgres, pass: postgres) |
 
-### Entorno
+### Environment
 
-Crear `docker.env` en la raíz (no versionado):
+Create `docker.env` in the project root (not versioned):
 
 ```env
 POSTGRESQL_CREDENTIALS='{"host":"mtto-db","port":5432,"database":"postgres","user":"postgres","password":"postgres","max":10,"idleTimeoutMillis":30000,"connectionTimeoutMillis":2000}'
 JWT_SECRET='xK8mP2nR5vY9bC3fG6jL1oQ4sU7wZ0aD2eH5tM8pR1vY4cF7jL9oQ2sU5wX8zA='
-GROQ_API_KEY='<tu-api-key-groq>'
+GROQ_API_KEY='<your-groq-api-key>'
 ```
 
-> Copiar de `backend/docker.env.example` si no existe.
+> Copy from `backend/docker.env.example` if it doesn't exist.
 
 ---
 
-## Deploy a AWS
+## Deploy to AWS
 
-### 1. Infraestructura (una sola vez)
+### 1. Infrastructure (one-time)
 
 ```bash
 cd terraform
-cp terraform.tfvars.example terraform.tfvars  # completar valores
+cp terraform.tfvars.example terraform.tfvars  # fill in values
 terraform init
 terraform apply
 ```
 
-Esto crea: RDS, S3 buckets (frontend + deploy), IAM roles, parámetros en SSM.
+This creates: RDS, S3 buckets (frontend + deploy), IAM roles, SSM parameters.
 
 ### 2. Backend (Serverless Framework)
 
@@ -90,23 +90,23 @@ npm run sls-deploy
 ```bash
 cd frontend
 
-# Opción A — sin Docker (requiere Node.js local)
+# Option A — without Docker (requires Node.js locally)
 npm run build
 aws s3 sync dist/ s3://mtto-frontend-<account_id>-desa --delete
 
-# Opción B — usando Docker
+# Option B — using Docker
 docker build --target build -t frontend-deployer .
 docker run --rm \
   -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN \
   --entrypoint sh \
   frontend-deployer
-  # dentro del contenedor:
+  # inside the container:
   npm run build
   aws s3 sync dist/ s3://mtto-frontend-<account_id>-desa --delete
   exit
 ```
 
-### 4. Invalidar CloudFront (si se actualizó el frontend)
+### 4. Invalidate CloudFront (after frontend updates)
 
 ```bash
 aws cloudfront create-invalidation \
@@ -114,7 +114,7 @@ aws cloudfront create-invalidation \
   --paths "/*"
 ```
 
-Los outputs de Terraform te dan el bucket name y distribution ID:
+Get outputs from Terraform:
 
 ```bash
 terraform output frontend_bucket_name
@@ -123,43 +123,43 @@ terraform output cloudfront_distribution_id
 
 ---
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
-├── backend/              # API Serverless (Node.js + TypeScript)
-│   ├── src/              # Código fuente (Arquitectura Hexagonal)
-│   ├── config/           # Config Serverless Framework
-│   ├── test/             # Tests BDD (jest-cucumber)
+├── backend/              # Serverless API (Node.js + TypeScript)
+│   ├── src/              # Source code (Hexagonal Architecture)
+│   ├── config/           # Serverless Framework config
+│   ├── test/             # BDD tests (jest-cucumber)
 │   ├── Dockerfile
 │   └── serverless.yaml
 │
-├── frontend/             # SPA React + Vite + Tailwind
-│   ├── src/              # Componentes, hooks, servicios
-│   ├── Dockerfile        # Multi-uso: build + nginx
-│   ├── nginx.conf        # Config Nginx para SPA
-│   └── docker-entrypoint.sh  # Inyección dinámica de env vars
+├── frontend/             # React SPA + Vite + Tailwind
+│   ├── src/              # Components, hooks, services
+│   ├── Dockerfile        # Multi-purpose: build + nginx
+│   ├── nginx.conf        # Nginx SPA configuration
+│   └── docker-entrypoint.sh  # Runtime env var injection
 │
-├── terraform/            # Infraestructura como código
+├── terraform/            # Infrastructure as Code
 │   ├── modules/
 │   │   ├── backend/      # RDS, IAM, SSM, S3 deploy
 │   │   └── frontend/     # S3 hosting, CloudFront
 │   └── main.tf
 │
-└── docker-compose.yml    # Orquestación local
+└── docker-compose.yml    # Local orchestration
 ```
 
 ---
 
-## Documentación por Componente
+## Component Documentation
 
-- [Backend](backend/README.md) — API endpoints, arquitectura hexagonal, tests
-- [Frontend](frontend/README.md) — Detalles técnicos de la SPA
+- [Backend](backend/README.md) — API endpoints, hexagonal architecture, tests
+- [Frontend](frontend/README.md) — SPA technical details
 
 ---
 
-## Credenciales de Prueba (Local)
+## Test Credentials (Local)
 
-| Usuario | Password |
+| Username | Password |
 |---|---|
 | user1 | hash1 |
 | user2 | hash2 |
