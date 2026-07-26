@@ -48,16 +48,16 @@ provider:
     SERVICE_NAME: maintenance-api    
     # Database (from Secrets Manager/Parameter Store)
     # POSTGRESQL_CREDENTIALS: "{{resolve:ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS}}"
-    POSTGRESQL_CREDENTIALS: ${env:POSTGRESQL_CREDENTIALS, ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS, '{"host":"localhost","port":5432,"database":"postgres","user":"postgres","password":"postgres","max":10,"idleTimeoutMillis":30000,"connectionTimeoutMillis":2000}'}    
+    POSTGRESQL_CREDENTIALS: ${env:POSTGRESQL_CREDENTIALS, ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS, '###'}    
     # JWT
     # JWT_SECRET: "{{resolve:ssm:${self:custom.ssmRootPath}/JWT_SECRET}}"
-    JWT_SECRET: ${env:JWT_SECRET, ssm:${self:custom.ssmRootPath}/JWT_SECRET, 'xK8mP2nR5vY9bC3fG6jL1oQ4sU7wZ0aD2eH5tM8pR1vY4cF7jL9oQ2sU5wX8zA='}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:${self:custom.ssmRootPath}/JWT_SECRET, '###'}
     JWT_AUDIENCE: 'maintenance-api'
     JWT_ISSUER: 'maintenance-api-issuer'
     JWT_EXPIRATION: '24h'
     # Groq LLM Configuration (AI Feature)
     # GROQ_API_KEY: "{{resolve:ssm:${self:custom.ssmRootPath}/GROQ_API_KEY}}"
-    GROQ_API_KEY: ${env:GROQ_API_KEY, ssm:${self:custom.ssmRootPath}/GROQ_API_KEY, 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'}
+    GROQ_API_KEY: ${env:GROQ_API_KEY, ssm:${self:custom.ssmRootPath}/GROQ_API_KEY, '###'}
     # Configurar con tu API Key de Groq desde https://console.groq.com
 
 custom:

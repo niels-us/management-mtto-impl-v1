@@ -1,7 +1,17 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_KEY = import.meta.env.VITE_API_KEY;
+declare global {
+  interface Window {
+    __ENV?: {
+      VITE_API_BASE_URL: string;
+      VITE_API_KEY: string;
+      VITE_APP_NAME: string;
+    };
+  }
+}
+
+const API_BASE_URL = window.__ENV?.VITE_API_BASE_URL ?? import.meta.env.VITE_API_BASE_URL;
+const API_KEY = window.__ENV?.VITE_API_KEY ?? import.meta.env.VITE_API_KEY;
 
 const api = axios.create({
   baseURL: API_BASE_URL,

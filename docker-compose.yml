@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mtto-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mtto-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mtto-app
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/docker.env
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/serverless.yaml:/app/serverless.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mtto-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mtto-frontend
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3000/DESA
+      - VITE_API_KEY=tu-api-key-aqui
+      - VITE_APP_NAME=MTTO Fleet Manager
+    depends_on:
+      - backend
+    networks:
+      - mtto-network
+
+volumes:
+  pgdata:
+
+networks:
+  mtto-network:
+    driver: bridge
