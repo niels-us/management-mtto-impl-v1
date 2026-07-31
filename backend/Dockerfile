@@ -5,7 +5,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Instalar dependencias del sistema
-RUN apk add --no-cache curl dumb-init python3 make g++
+RUN apk add --no-cache curl dumb-init python3 make g++ aws-cli
 
 # Copiar package.json
 COPY package.json package-lock.json ./
