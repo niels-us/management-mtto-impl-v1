@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { INestApplicationContext, Logger } from '@nestjs/common';
 import middy from '@middy/core';

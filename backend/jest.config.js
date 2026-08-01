@@ -7,7 +7,6 @@ process.env.JWT_ISSUER = process.env.JWT_ISSUER || 'maintenance-api';
 process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 
 module.exports = {
-  preset: 'ts-jest',
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/infrastructure/repository/*',
@@ -20,7 +19,7 @@ module.exports = {
     'src/common/*'
   ],
   transform: {
-    '^.+\\.(ts|tsx|js)$': 'ts-jest'
+    '^.+\\.(ts|tsx|js)$': ['@swc/jest', {}]
   },
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})`

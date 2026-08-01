@@ -15,6 +15,7 @@ RUN npm ci
 
 # Copiar código y configuración
 COPY tsconfig.json ./
+COPY .swcrc ./
 COPY src ./src
 COPY config ./config
 COPY openapi.json ./
