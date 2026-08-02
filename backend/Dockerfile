@@ -23,6 +23,9 @@ COPY serverless.yaml ./
 COPY jest.config.js ./
 COPY test ./test
 
+# Compilar a dist/ con SWC
+RUN npm run build
+
 # Variables de entorno
 ENV NODE_ENV=development
 ENV STAGE=DESA

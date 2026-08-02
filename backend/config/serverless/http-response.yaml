@@ -1,6 +1,6 @@
 headers:
   Access-Control-Allow-Origin: "'*'"
-  Access-Control-Allow-Credentials: "'true'"
+  Access-Control-Allow-Credentials: "'false'"
   X-Content-Type-Options: "'nosniff'"
   X-XSS-Protection: "'1; mode=block'"
   X-Frame-Options: "'SAMEORIGIN'"

@@ -1,5 +1,5 @@
 maintenanceAPI:
-  handler: src/maintenances/infrastructure/bootstrap/App.handler
+  handler: dist/maintenances/infrastructure/bootstrap/App.handler
   name: ${self:custom.regions.abrev.${opt:stage}}${self:custom.accounts.abrev.${opt:stage}}${opt:stage}COMLMBMAINTENANCEAPI001
   description: Maintenance API - Gestión de mantenimientos de buques y componentes
   role: ${self:custom.role.${opt:stage}}
@@ -97,7 +97,7 @@ maintenanceAPI:
         
 # Swagger Documentation Handler - Production
 swagger:
-  handler: src/common/infrastructure/swagger/SwaggerHandler.swaggerHandler
+  handler: dist/common/infrastructure/swagger/SwaggerHandler.swaggerHandler
   timeout: 10
   memorySize: 256
   description: Swagger UI Documentation
@@ -110,7 +110,7 @@ swagger:
 
 # OpenAPI JSON Endpoint - Production
 swaggerJson:
-  handler: src/common/infrastructure/swagger/SwaggerHandler.swaggerJsonHandler
+  handler: dist/common/infrastructure/swagger/SwaggerHandler.swaggerJsonHandler
   timeout: 10
   memorySize: 256
   description: OpenAPI Specification JSON
