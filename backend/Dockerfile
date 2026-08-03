@@ -25,6 +25,7 @@ COPY test ./test
 
 # Compilar a dist/ con SWC
 RUN npm run build
+RUN npm run bundle
 
 # Variables de entorno
 ENV NODE_ENV=development

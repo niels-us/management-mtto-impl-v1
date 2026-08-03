@@ -91,14 +91,22 @@ plugins:
 package:
   individually: true
   patterns:
-    - dist/**
-    - node_modules/**    
-    - openapi.json
+    - '!node_modules/**'
+    - '!dist/**'
+    - '!config/**'
+    - '!src/**'
     - '!coverage/**'
     - '!test/**'
     - '!jest.*'
     - '!**/*.test.ts'
     - '!**/*.spec.ts'
-    - '!node_modules/.bin/**'
+    - '!tsconfig.json'
+    - '!.swcrc'
+    - '!package-lock.json'
+    - 'node_modules/bcrypt/**'
+    - 'node_modules/node-gyp-build/**'
+    - 'dist-bundle/**'
+    - 'openapi.json'
+    - 'package.json'
 
 functions: ${file(config/serverless/functions.${self:custom.functionsFile}.yaml)}
