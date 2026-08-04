@@ -28,7 +28,7 @@ REST API per la gestione della manutenzione di flotte navali, sviluppata con arc
 ## Prerequisiti
 
 - **Docker** e **Docker Compose** (per eseguire l'intera applicazione in locale)
-- **Node.js** >= 20.x e **npm** >= 9.x (solo per eseguire i test o sviluppare in locale senza Docker)
+- **Node.js** >= 20.x e **pnpm** >= 9.x (solo per eseguire i test o sviluppare in locale senza Docker)
 
 ---
 
@@ -42,10 +42,10 @@ Il progetto è completamente dockerizzato. Sia il database PostgreSQL che l'API 
 docker-compose up -d
 ```
 
-oppure, usando lo script npm:
+oppure, usando lo script pnpm:
 
 ```bash
-npm run docker:up
+pnpm run docker:up
 ```
 
 Questo comando avvia due container:
@@ -77,7 +77,7 @@ docker-compose ps
 Per seguire i log dell'applicazione in tempo reale:
 
 ```bash
-npm run docker:logs
+pnpm run docker:logs
 # oppure
 docker-compose logs -f app
 ```
@@ -85,7 +85,7 @@ docker-compose logs -f app
 ### 3. Ricostruire l'immagine dopo modifiche al codice
 
 ```bash
-npm run docker:rebuild
+pnpm run docker:rebuild
 # oppure
 docker-compose up -d --build
 ```
@@ -93,7 +93,7 @@ docker-compose up -d --build
 ### 4. Fermare e rimuovere i container
 
 ```bash
-npm run docker:down
+pnpm run docker:down
 # oppure
 docker-compose down
 ```
@@ -102,18 +102,18 @@ docker-compose down
 
 ## Avviare il Progetto in Locale (senza Docker)
 
-> Richiede Node.js >= 20.x, npm >= 9.x e un'istanza PostgreSQL raggiungibile.
+> Richiede Node.js >= 20.x, pnpm >= 9.x e un'istanza PostgreSQL raggiungibile.
 
 ### 1. Installare le dipendenze
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. Avviare il server locale
 
 ```bash
-npm start
+pnpm start
 ```
 
 Il server si avvierà su `http://localhost:3001` con stage `/DESA`.
@@ -121,30 +121,30 @@ Il server si avvierà su `http://localhost:3001` con stage `/DESA`.
 ### 3. Eseguire i test
 
 ```bash
-npm test
+pnpm test
 ```
 
 I test sono scritti in stile BDD con jest-cucumber e coprono i casi d'uso principali del modulo `maintenances`.
 
 ---
 
-## Script npm Disponibili
+## Script pnpm Disponibili
 
 | Script | Descrizione |
 |---|---|
-| `npm start` | Avvia il server locale con serverless-offline (porta 3001) |
-| `npm run start:docker` | Avvia l'app compilata dentro il container Docker (`node dist/...`) |
-| `npm test` | Esegue i test con coverage |
-| `npm run build` | Compila TypeScript → `dist/` |
-| `npm run lint` | Esegue l'analisi statica ESLint su `src/` |
-| `npm run docker:up` | Avvia tutti i container (`docker-compose up -d`) |
-| `npm run docker:down` | Ferma e rimuove i container |
-| `npm run docker:rebuild` | Ricostruisce l'immagine e riavvia i container |
-| `npm run docker:restart` | Riavvia solo il container `app` |
-| `npm run docker:logs` | Segue i log del container `app` |
-| `npm run docker:build` | Costruisce l'immagine Docker localmente |
-| `npm run docker:clean` | Ferma i container e rimuove i volumi (`down -v`) |
-| `npm run sls-deploy` | Deploy su AWS (stage DESA, us-east-1) |
+| `pnpm start` | Avvia il server locale con serverless-offline (porta 3001) |
+| `pnpm run start:docker` | Avvia l'app compilata dentro il container Docker (`node dist/...`) |
+| `pnpm test` | Esegue i test con coverage |
+| `pnpm run build` | Compila TypeScript → `dist/` |
+| `pnpm run lint` | Esegue l'analisi statica ESLint su `src/` |
+| `pnpm run docker:up` | Avvia tutti i container (`docker-compose up -d`) |
+| `pnpm run docker:down` | Ferma e rimuove i container |
+| `pnpm run docker:rebuild` | Ricostruisce l'immagine e riavvia i container |
+| `pnpm run docker:restart` | Riavvia solo il container `app` |
+| `pnpm run docker:logs` | Segue i log del container `app` |
+| `pnpm run docker:build` | Costruisce l'immagine Docker localmente |
+| `pnpm run docker:clean` | Ferma i container e rimuove i volumi (`down -v`) |
+| `pnpm run sls-deploy` | Deploy su AWS (stage DESA, us-east-1) |
 
 ---
 
@@ -292,7 +292,7 @@ Il file `init.sql` crea automaticamente al primo avvio di Docker:
 Per re-inizializzare il database da zero (elimina anche i volumi):
 
 ```bash
-npm run docker:clean
+pnpm run docker:clean
 docker-compose up -d
 ```
 

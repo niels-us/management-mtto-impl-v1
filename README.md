@@ -82,7 +82,7 @@ This creates: RDS, S3 buckets (frontend + deploy), IAM roles, SSM parameters.
 
 ```bash
 cd backend
-npm run sls-deploy
+pnpm run sls-deploy
 ```
 
 ### 3. Frontend (S3 + CloudFront)
@@ -91,7 +91,7 @@ npm run sls-deploy
 cd frontend
 
 # Option A — without Docker (requires Node.js locally)
-npm run build
+pnpm run build
 aws s3 sync dist/ s3://mtto-frontend-<account_id>-desa --delete
 
 # Option B — using Docker
@@ -101,7 +101,7 @@ docker run --rm \
   --entrypoint sh \
   frontend-deployer
   # inside the container:
-  npm run build
+  pnpm run build
   aws s3 sync dist/ s3://mtto-frontend-<account_id>-desa --delete
   exit
 ```

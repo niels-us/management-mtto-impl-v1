@@ -8,10 +8,10 @@ WORKDIR /app
 RUN apk add --no-cache curl dumb-init python3 make g++ aws-cli
 
 # Copiar package.json
-COPY package.json package-lock.json ./
+COPY package.json pnpm-lock.yaml .npmrc ./
 
 # Instalar todas las dependencias (incluidas devDependencies para serverless-offline)
-RUN npm ci
+RUN corepack enable && pnpm install --frozen-lockfile
 
 # Copiar código y configuración
 COPY tsconfig.json ./
@@ -21,6 +21,10 @@ COPY openapi.json ./
 COPY serverless.yaml ./
 COPY jest.config.js ./
 COPY test ./test
+
+# Compilar a dist/ y bundle con esbuild
+RUN pnpm run build
+RUN pnpm run bundle
 
 # Variables de entorno
 ENV NODE_ENV=development
@@ -37,4 +41,4 @@ EXPOSE 3000
 
 # Comando de inicio
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["npx", "serverless", "offline", "start", "--stage", "DESA", "--param=functionsFile=local", "--host", "0.0.0.0"]
+CMD ["pnpm", "exec", "serverless", "offline", "start", "--stage", "DESA", "--param=functionsFile=local", "--host", "0.0.0.0"]

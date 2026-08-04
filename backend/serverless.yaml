@@ -48,16 +48,16 @@ provider:
     SERVICE_NAME: maintenance-api    
     # Database (from Secrets Manager/Parameter Store)
     # POSTGRESQL_CREDENTIALS: "{{resolve:ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS}}"
-    POSTGRESQL_CREDENTIALS: ${env:POSTGRESQL_CREDENTIALS, ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS, '###'}    
+    POSTGRESQL_CREDENTIALS: ${env:POSTGRESQL_CREDENTIALS, ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS, '###'} #_SQL
     # JWT
     # JWT_SECRET: "{{resolve:ssm:${self:custom.ssmRootPath}/JWT_SECRET}}"
-    JWT_SECRET: ${env:JWT_SECRET, ssm:${self:custom.ssmRootPath}/JWT_SECRET, '###'}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:${self:custom.ssmRootPath}/JWT_SECRET, '###'} #_JWT
     JWT_AUDIENCE: 'maintenance-api'
     JWT_ISSUER: 'maintenance-api-issuer'
     JWT_EXPIRATION: '24h'
     # Groq LLM Configuration (AI Feature)
     # GROQ_API_KEY: "{{resolve:ssm:${self:custom.ssmRootPath}/GROQ_API_KEY}}"
-    GROQ_API_KEY: ${env:GROQ_API_KEY, ssm:${self:custom.ssmRootPath}/GROQ_API_KEY, '###'}
+    GROQ_API_KEY: ${env:GROQ_API_KEY, ssm:${self:custom.ssmRootPath}/GROQ_API_KEY, '###'} #_GRO
     # Configurar con tu API Key de Groq desde https://console.groq.com
 
 custom:
@@ -87,19 +87,36 @@ custom:
 
 plugins:
   - serverless-offline
-  - serverless-plugin-typescript
 
 package:
   individually: true
   patterns:
-    - src/**
-    - node_modules/**    
-    - openapi.json
+    - '!node_modules/**'
+    - '!dist/**'
+    - '!config/**'
+    - '!src/**'
     - '!coverage/**'
     - '!test/**'
     - '!jest.*'
     - '!**/*.test.ts'
     - '!**/*.spec.ts'
-    - '!node_modules/.bin/**'
+    - '!tsconfig.json'
+    - '!pnpm-lock.yaml'
+    - '!.env'
+    - '!Dockerfile'
+    - '!.dockerignore'
+    - '!docker-compose.yml'
+    - '!docker.env.example'
+    - '!init.sql'
+    - '!README.md'
+    - '!ANSWERS.md'
+    - '!.prettierrc'
+    - '!.eslintrc.yml'
+    - '!.npmrc'
+    - 'node_modules/bcrypt/**'
+    - 'node_modules/node-gyp-build/**'
+    - 'dist-bundle/**'
+    - 'openapi.json'
+    - 'package.json'
 
 functions: ${file(config/serverless/functions.${self:custom.functionsFile}.yaml)}
