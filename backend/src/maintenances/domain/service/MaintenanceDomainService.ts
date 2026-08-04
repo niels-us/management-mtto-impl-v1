@@ -1,16 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { CustomerRepository } from '../repository/CustomerRepository';
-import { UserRepository } from '../repository/UserRepository';
-import { VesselRepository } from '../repository/VesselRepository';
-import { ComponentRepository } from '../repository/ComponentRepository';
-import { MaintenanceRepository } from '../repository/MaintenanceRepository';
-import { Customer } from '../entities/Customer';
-import { User } from '../entities/User';
-import { Vessel } from '../entities/Vessel';
-import { Component } from '../entities/Component';
-import { Maintenance, MaintenanceStatus } from '../entities/Maintenance';
-import CustomException from '../../../common/application/exception/CustomException';
+import type { CustomerRepository } from '../repository/CustomerRepository.js';
+import type { UserRepository } from '../repository/UserRepository.js';
+import type { VesselRepository } from '../repository/VesselRepository.js';
+import type { ComponentRepository } from '../repository/ComponentRepository.js';
+import type { MaintenanceRepository } from '../repository/MaintenanceRepository.js';
+import { Customer } from '../entities/Customer.js';
+import { User } from '../entities/User.js';
+import { Vessel } from '../entities/Vessel.js';
+import { Component } from '../entities/Component.js';
+import { Maintenance, type MaintenanceStatus } from '../entities/Maintenance.js';
+import CustomException from '../../../common/application/exception/CustomException.js';
 
 @Injectable()
 export class MaintenanceDomainService {

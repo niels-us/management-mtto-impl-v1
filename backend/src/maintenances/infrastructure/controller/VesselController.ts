@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
-import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService';
-import { RequestDto } from '../../../common/application/dto/RequestDto';
-import { RequireTenant } from '../../../common/infrastructure/middleware';
-import CustomException from '../../../common/application/exception/CustomException';
-import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation';
+import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService.js';
+import { RequestDto } from '../../../common/application/dto/RequestDto.js';
+import { RequireTenant } from '../../../common/infrastructure/middleware/index.js';
+import CustomException from '../../../common/application/exception/CustomException.js';
+import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation.js';
 
 @Controller()
 export class VesselController {

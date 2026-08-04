@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './AuthController';
-import { VesselController } from './VesselController';
-import { MaintenanceController } from './MaintenanceController';
-import { AIQueryController } from './AIQueryController';
-import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation';
-import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService';
-import { MaintenanceDomainService } from '../../domain/service/MaintenanceDomainService';
-import { AIMaintenanceService } from '../../application/ai/AIMaintenanceService';
-import { MaintenancePostgreRepository } from '../repository/MaintenancePostgreRepository';
-import { TenantValidator, TenantValidationGuard, TenantInterceptor } from '../../../common/infrastructure/middleware';
-import { GroqLLMProvider } from '../../../common/ai/GroqLLMProvider';
-import { AIPromptBuilder } from '../../../common/ai/AIPromptBuilder';
-import { LLMProvider } from '../../../common/ai/LLMProvider';
+import { AuthController } from './AuthController.js';
+import { VesselController } from './VesselController.js';
+import { MaintenanceController } from './MaintenanceController.js';
+import { AIQueryController } from './AIQueryController.js';
+import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation.js';
+import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService.js';
+import { MaintenanceDomainService } from '../../domain/service/MaintenanceDomainService.js';
+import { AIMaintenanceService } from '../../application/ai/AIMaintenanceService.js';
+import { MaintenancePostgreRepository } from '../repository/MaintenancePostgreRepository.js';
+import { TenantValidator, TenantValidationGuard, TenantInterceptor } from '../../../common/infrastructure/middleware/index.js';
+import { GroqLLMProvider } from '../../../common/ai/GroqLLMProvider.js';
+import { AIPromptBuilder } from '../../../common/ai/AIPromptBuilder.js';
 
 @Module({
   controllers: [AuthController, VesselController, MaintenanceController, AIQueryController],

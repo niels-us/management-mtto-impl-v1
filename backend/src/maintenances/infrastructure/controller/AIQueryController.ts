@@ -1,9 +1,9 @@
 import { Controller, Logger } from '@nestjs/common';
-import { AIMaintenanceService } from '../../application/ai/AIMaintenanceService';
-import { AIQueryRequest } from '../../application/ai/dto/AIQueryRequest';
-import { AIQueryResponse } from '../../application/ai/dto/AIQueryResponse';
-import { RequestDto } from '../../../common/application/dto/RequestDto';
-import CustomException from '../../../common/application/exception/CustomException';
+import { AIMaintenanceService } from '../../application/ai/AIMaintenanceService.js';
+import { AIQueryRequest } from '../../application/ai/dto/AIQueryRequest.js';
+import { AIQueryResponse } from '../../application/ai/dto/AIQueryResponse.js';
+import { RequestDto } from '../../../common/application/dto/RequestDto.js';
+import CustomException from '../../../common/application/exception/CustomException.js';
 
 @Controller()
 export class AIQueryController {

@@ -1,4 +1,4 @@
-import { Maintenance, MaintenanceStatus } from '../entities/Maintenance';
+import { Maintenance, type MaintenanceStatus } from '../entities/Maintenance.js';
 
 export interface MaintenanceRepository {
   createMaintenance(maintenance: Maintenance): Promise<Maintenance>;

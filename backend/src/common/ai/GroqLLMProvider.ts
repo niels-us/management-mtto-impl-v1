@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import Groq from 'groq-sdk';
-import { LLMProvider } from './LLMProvider';
-import { AIConstants } from '../constants/AIConstants';
-import CustomException from '../application/exception/CustomException';
+import type { LLMProvider } from './LLMProvider.js';
+import { AIConstants } from '../constants/AIConstants.js';
+import CustomException from '../application/exception/CustomException.js';
 
 @Injectable()
 export class GroqLLMProvider implements LLMProvider {

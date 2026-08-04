@@ -1,12 +1,12 @@
 import { Injectable, Logger, Inject } from '@nestjs/common';
-import { MaintenanceDomainService } from '../../domain/service/MaintenanceDomainService';
-import { AIPromptBuilder, MaintenanceContext } from '../../../common/ai/AIPromptBuilder';
-import { LLMProvider } from '../../../common/ai/LLMProvider';
-import { AIConstants } from '../../../common/constants/AIConstants';
-import { AIQueryRequest } from './dto/AIQueryRequest';
-import { AIQueryResponse } from './dto/AIQueryResponse';
-import { Component } from '../../domain/entities/Component';
-import { Maintenance } from '../../domain/entities/Maintenance';
+import { MaintenanceDomainService } from '../../domain/service/MaintenanceDomainService.js';
+import { AIPromptBuilder, type MaintenanceContext } from '../../../common/ai/AIPromptBuilder.js';
+import type { LLMProvider } from '../../../common/ai/LLMProvider.js';
+import { AIConstants } from '../../../common/constants/AIConstants.js';
+import { AIQueryRequest } from './dto/AIQueryRequest.js';
+import { AIQueryResponse } from './dto/AIQueryResponse.js';
+import { Component } from '../../domain/entities/Component.js';
+import { Maintenance } from '../../domain/entities/Maintenance.js';
 
 @Injectable()
 export class AIMaintenanceService {

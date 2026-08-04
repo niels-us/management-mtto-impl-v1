@@ -21,6 +21,9 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx|js)$': ['@swc/jest', {}]
   },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1'
+  },
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})`
   ],

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { MaintenanceDomainService } from '../../domain/service/MaintenanceDomainService';
-import { Maintenance } from '../../domain/entities/Maintenance';
-import { User } from '../../domain/entities/User';
-import { Vessel } from '../../domain/entities/Vessel';
-import { Component } from '../../domain/entities/Component';
-import * as jwt from 'jsonwebtoken';
+import { MaintenanceDomainService } from '../../domain/service/MaintenanceDomainService.js';
+import { Maintenance } from '../../domain/entities/Maintenance.js';
+import { User } from '../../domain/entities/User.js';
+import { Vessel } from '../../domain/entities/Vessel.js';
+import { Component } from '../../domain/entities/Component.js';
+import jwt from 'jsonwebtoken';
 
 @Injectable()
 export class MaintenanceApplicationService {

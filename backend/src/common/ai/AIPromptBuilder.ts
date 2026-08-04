@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Maintenance } from '../../maintenances/domain/entities/Maintenance';
-import { Component } from '../../maintenances/domain/entities/Component';
-import { Vessel } from '../../maintenances/domain/entities/Vessel';
+import { Maintenance } from '../../maintenances/domain/entities/Maintenance.js';
+import { Component } from '../../maintenances/domain/entities/Component.js';
+import { Vessel } from '../../maintenances/domain/entities/Vessel.js';
 
 export interface MaintenanceContext {
   vessels: Vessel[];

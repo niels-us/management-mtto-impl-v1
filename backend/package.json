@@ -2,10 +2,11 @@
   "name": "maintenance-api-impl-v1",
   "version": "1.0.0",
   "description": "Arquetipo template basado en typescript - api rest",
+  "type": "module",
   "scripts": {
     "build": "npm run typecheck && swc src -d dist --strip-leading-paths",
     "build:dev": "swc src -d dist --strip-leading-paths",
-    "bundle": "esbuild dist/maintenances/infrastructure/bootstrap/App.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist-bundle/App.js --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --log-level=warning && esbuild dist/common/infrastructure/swagger/SwaggerHandler.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist-bundle/SwaggerHandler.js --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --log-level=warning",
+    "bundle": "esbuild dist/maintenances/infrastructure/bootstrap/App.js --bundle --platform=node --target=node20 --format=esm --outfile=dist-bundle/App.js --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\" --log-level=warning && esbuild dist/common/infrastructure/swagger/SwaggerHandler.js --bundle --platform=node --target=node20 --format=esm --outfile=dist-bundle/SwaggerHandler.js --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\" --log-level=warning",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "set IS_AUTH_IAM=true && npm run build && serverless offline start --stage DESA --param=\"functionsFile=local\" --httpPort 3001",

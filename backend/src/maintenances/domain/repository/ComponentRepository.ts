@@ -1,4 +1,4 @@
-import { Component } from '../entities/Component';
+import { Component } from '../entities/Component.js';
 
 export interface ComponentRepository {
   findAllByVessel(vesselId: string, customerId: string): Promise<Component[]>;

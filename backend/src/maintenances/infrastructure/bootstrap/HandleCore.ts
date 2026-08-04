@@ -1,10 +1,10 @@
 import { INestApplicationContext, Type } from '@nestjs/common';
-import { MaintenanceModule } from '../controller/MaintenanceModule';
-import { MaintenanceController } from '../controller/MaintenanceController';
-import { AuthController } from '../controller/AuthController';
-import { VesselController } from '../controller/VesselController';
-import { AIQueryController } from '../controller/AIQueryController';
-import CustomException from '../../../common/application/exception/CustomException';
+import { MaintenanceModule } from '../controller/MaintenanceModule.js';
+import { MaintenanceController } from '../controller/MaintenanceController.js';
+import { AuthController } from '../controller/AuthController.js';
+import { VesselController } from '../controller/VesselController.js';
+import { AIQueryController } from '../controller/AIQueryController.js';
+import CustomException from '../../../common/application/exception/CustomException.js';
 
 const controllersModulesMap: [Type<any>, Type<any>][] = [
   [AuthController, MaintenanceModule],

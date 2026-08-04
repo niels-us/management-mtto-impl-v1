@@ -1,6 +1,6 @@
-import { validationMessages } from './ValidationMessages';
-import CustomException from '../exception/CustomException';
-import { ERROR_VALIDAR_DATOS } from '../exception/ErrorConstants';
+import { validationMessages } from './ValidationMessages.js';
+import CustomException from '../exception/CustomException.js';
+import { ERROR_VALIDAR_DATOS } from '../exception/ErrorConstants.js';
 import { HttpStatus } from '@nestjs/common';
 
 export const validate = async (schema, payload) => {

@@ -1,4 +1,4 @@
-import { User } from '../entities/User';
+import { User } from '../entities/User.js';
 
 export interface UserRepository {
   findByUsername(username: string): Promise<User | null>;

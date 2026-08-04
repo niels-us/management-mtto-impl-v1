@@ -1,5 +1,5 @@
-import * as Joi from 'joi';
-import { AIConstants } from '../../../../common/constants/AIConstants';
+import Joi from 'joi';
+import { AIConstants } from '../../../../common/constants/AIConstants.js';
 
 export class AIQueryRequest {
   question: string;

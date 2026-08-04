@@ -2,10 +2,10 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { INestApplicationContext, Logger } from '@nestjs/common';
 import middy from '@middy/core';
-import { AppModule } from './AppModule';
-import HandleCore from './HandleCore';
-import * as jwt from 'jsonwebtoken';
-import CustomException from '../../../common/application/exception/CustomException';
+import { AppModule } from './AppModule.js';
+import HandleCore from './HandleCore.js';
+import jwt from 'jsonwebtoken';
+import CustomException from '../../../common/application/exception/CustomException.js';
 
 let MaintenanceAppContext: INestApplicationContext;
 const logger = new Logger('MaintenanceAPI');

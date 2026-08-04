@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
-import { LoginRequest } from '../dto/request/LoginRequest';
-import { CreateMaintenanceRequest } from '../dto/request/CreateMaintenanceRequest';
-import { UpdateMaintenanceRequest } from '../dto/request/UpdateMaintenanceRequest';
-import { UUIDValidator } from '../../../common/application/validation/UUIDValidator';
+import type { LoginRequest } from '../dto/request/LoginRequest.js';
+import type { CreateMaintenanceRequest } from '../dto/request/CreateMaintenanceRequest.js';
+import type { UpdateMaintenanceRequest } from '../dto/request/UpdateMaintenanceRequest.js';
+import { UUIDValidator } from '../../../common/application/validation/UUIDValidator.js';
 
 export class MaintenanceRequestValidation {
   async validateLogin(payload: LoginRequest) {

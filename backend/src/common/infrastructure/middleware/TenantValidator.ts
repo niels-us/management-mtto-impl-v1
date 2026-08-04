@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import { VesselRepository } from '../../../maintenances/domain/repository/VesselRepository';
-import { ComponentRepository } from '../../../maintenances/domain/repository/ComponentRepository';
-import { MaintenanceRepository } from '../../../maintenances/domain/repository/MaintenanceRepository';
+import type { VesselRepository } from '../../../maintenances/domain/repository/VesselRepository.js';
+import type { ComponentRepository } from '../../../maintenances/domain/repository/ComponentRepository.js';
+import type { MaintenanceRepository } from '../../../maintenances/domain/repository/MaintenanceRepository.js';
 
 export type TenantEntity = 'vessel' | 'component' | 'maintenance' | 'custom';
 

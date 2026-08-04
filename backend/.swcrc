@@ -12,6 +12,6 @@
     "keepClassNames": true
   },
   "module": {
-    "type": "commonjs"
+    "type": "es6"
   }
 }

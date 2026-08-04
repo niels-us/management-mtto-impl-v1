@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService';
-import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation';
-import { RequestDto } from '../../../common/application/dto/RequestDto';
-import { LoginRequest } from '../../application/dto/request/LoginRequest';
+import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService.js';
+import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation.js';
+import { RequestDto } from '../../../common/application/dto/RequestDto.js';
+import type { LoginRequest } from '../../application/dto/request/LoginRequest.js';
 
 @Controller()
 export class AuthController {

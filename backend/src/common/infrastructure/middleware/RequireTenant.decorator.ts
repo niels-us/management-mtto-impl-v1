@@ -1,5 +1,5 @@
 import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common';
-import { TenantValidationGuard, TenantRequirement, TENANT_REQUIREMENT_KEY } from './TenantValidationGuard';
+import { TenantValidationGuard, type TenantRequirement, TENANT_REQUIREMENT_KEY } from './TenantValidationGuard.js';
 
 export function RequireTenant(requirement: TenantRequirement) {
   return applyDecorators(UseGuards(TenantValidationGuard), SetMetadata(TENANT_REQUIREMENT_KEY, requirement));

@@ -1,4 +1,4 @@
-import { Vessel } from '../entities/Vessel';
+import { Vessel } from '../entities/Vessel.js';
 
 export interface VesselRepository {
   findAllByCustomer(customerId: string): Promise<Vessel[]>;

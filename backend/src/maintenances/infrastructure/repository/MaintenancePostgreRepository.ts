@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { PoolClient } from 'pg';
-import { PostgreSQLConnection } from '../../../common/db/methods/PostgreSQLConnection';
-import { Customer } from '../../domain/entities/Customer';
-import { User } from '../../domain/entities/User';
-import { Vessel } from '../../domain/entities/Vessel';
-import { Component } from '../../domain/entities/Component';
-import { Maintenance } from '../../domain/entities/Maintenance';
-import { CustomerRepository } from '../../domain/repository/CustomerRepository';
-import { UserRepository } from '../../domain/repository/UserRepository';
-import { VesselRepository } from '../../domain/repository/VesselRepository';
-import { ComponentRepository } from '../../domain/repository/ComponentRepository';
-import { MaintenanceRepository } from '../../domain/repository/MaintenanceRepository';
+import type { PoolClient } from 'pg';
+import { PostgreSQLConnection } from '../../../common/db/methods/PostgreSQLConnection.js';
+import { Customer } from '../../domain/entities/Customer.js';
+import { User } from '../../domain/entities/User.js';
+import { Vessel } from '../../domain/entities/Vessel.js';
+import { Component } from '../../domain/entities/Component.js';
+import { Maintenance } from '../../domain/entities/Maintenance.js';
+import type { CustomerRepository } from '../../domain/repository/CustomerRepository.js';
+import type { UserRepository } from '../../domain/repository/UserRepository.js';
+import type { VesselRepository } from '../../domain/repository/VesselRepository.js';
+import type { ComponentRepository } from '../../domain/repository/ComponentRepository.js';
+import type { MaintenanceRepository } from '../../domain/repository/MaintenanceRepository.js';
 
 @Injectable()
 export class MaintenancePostgreRepository

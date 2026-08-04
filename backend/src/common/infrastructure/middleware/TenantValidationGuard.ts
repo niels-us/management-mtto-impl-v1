@@ -7,7 +7,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { TenantValidator, TenantValidationError, TenantEntity } from './TenantValidator';
+import { TenantValidator, TenantValidationError, type TenantEntity } from './TenantValidator.js';
 
 export interface TenantRequirement {
   entityType: TenantEntity;

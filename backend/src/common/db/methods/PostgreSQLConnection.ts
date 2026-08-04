@@ -1,8 +1,8 @@
 import { Pool, PoolClient } from 'pg';
 import { Logger } from '@nestjs/common';
-import { ErrorConstants } from '../../constants/ErrorConstants';
-import { HttpConstants } from '../../constants/HttpConstants';
-import CustomException from '../../application/exception/CustomException';
+import { ErrorConstants } from '../../constants/ErrorConstants.js';
+import { HttpConstants } from '../../constants/HttpConstants.js';
+import CustomException from '../../application/exception/CustomException.js';
 
 const logger = new Logger('PostgreSQLConnection');
 

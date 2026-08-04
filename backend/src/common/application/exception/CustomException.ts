@@ -1,4 +1,4 @@
-import { AppException } from './AppException';
+import { AppException } from './AppException.js';
 
 export default class CustomException extends AppException {
   public name: string;

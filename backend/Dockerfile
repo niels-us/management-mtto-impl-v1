@@ -20,7 +20,7 @@ COPY src ./src
 COPY config ./config
 COPY openapi.json ./
 COPY serverless.yaml ./
-COPY jest.config.js ./
+COPY jest.config.cjs ./
 COPY test ./test
 
 # Compilar a dist/ con SWC

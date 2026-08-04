@@ -1,12 +1,12 @@
 import { Controller } from '@nestjs/common';
-import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService';
-import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation';
-import { RequestDto } from '../../../common/application/dto/RequestDto';
-import CustomException from '../../../common/application/exception/CustomException';
-import { RequireTenant } from '../../../common/infrastructure/middleware';
-import { CreateMaintenanceRequest } from '../../application/dto/request/CreateMaintenanceRequest';
-import { UpdateMaintenanceRequest } from '../../application/dto/request/UpdateMaintenanceRequest';
-import { Maintenance } from '../../domain/entities/Maintenance';
+import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService.js';
+import { MaintenanceRequestValidation } from '../../application/validation/MaintenanceRequestValidation.js';
+import { RequestDto } from '../../../common/application/dto/RequestDto.js';
+import CustomException from '../../../common/application/exception/CustomException.js';
+import { RequireTenant } from '../../../common/infrastructure/middleware/index.js';
+import type { CreateMaintenanceRequest } from '../../application/dto/request/CreateMaintenanceRequest.js';
+import type { UpdateMaintenanceRequest } from '../../application/dto/request/UpdateMaintenanceRequest.js';
+import { Maintenance } from '../../domain/entities/Maintenance.js';
 import { v4 as uuidv4 } from 'uuid';
 
 @Controller()
