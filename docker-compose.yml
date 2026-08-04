@@ -29,7 +29,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - ./backend/docker.env
+      - ./backend/.env
     volumes:
       - ./backend/src:/app/src
       - ./backend/serverless.yaml:/app/serverless.yaml
