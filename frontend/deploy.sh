@@ -7,7 +7,7 @@ REGION="${3:-us-east-1}"
 SOURCE_DIR="dist"
 
 echo "==> Building frontend..."
-npm run build
+pnpm run build
 
 echo "==> Syncing to S3 bucket: ${BUCKET_NAME}"
 aws s3 sync "${SOURCE_DIR}/" "s3://${BUCKET_NAME}/" --delete --region "${REGION}"
