@@ -22,7 +22,7 @@ Fleet maintenance management system. Composed of a serverless backend on AWS Lam
 | Component | Tech Stack | Deployment |
 |---|---|---|
 | **Frontend** | React 19, Vite 8, TypeScript 6, Tailwind 4 | S3 + CloudFront |
-| **Backend** | Node.js 20, TypeScript 5, NestJS 10, Serverless 3 | Lambda + API Gateway |
+| **Backend** | Node.js 24 (runtime `nodejs24.x`), TypeScript 5, NestJS 10, Serverless 4 | Lambda + API Gateway |
 | **Database** | PostgreSQL 15 (RDS) | Terraform |
 | **Infrastructure** | Terraform 1.5+ | `terraform apply` |
 
@@ -31,7 +31,8 @@ Fleet maintenance management system. Composed of a serverless backend on AWS Lam
 ## Prerequisites
 
 - **Docker** and **Docker Compose** (local development)
-- **Node.js** >= 20 (only if not using Docker)
+- **Node.js** 24 — pinned via `.nvmrc` in `backend/` and `frontend/` (only if not using Docker)
+- **pnpm** 10 (`packageManager: pnpm@10.33.0` in both workspaces)
 - **AWS CLI** configured (deployment)
 - **Terraform** >= 1.5 (infrastructure)
 
@@ -53,15 +54,28 @@ docker compose up -d
 
 ### Environment
 
-Create `docker.env` in the project root (not versioned):
+Create `backend/.env` (gitignored, not versioned) — it is injected into the local stack
+by `docker-compose.yml` (`env_file: ./backend/.env`) and used as the local fallback for
+runtime secrets:
 
 ```env
 POSTGRESQL_CREDENTIALS='{"host":"mtto-db","port":5432,"database":"postgres","user":"postgres","password":"postgres","max":10,"idleTimeoutMillis":30000,"connectionTimeoutMillis":2000}'
-JWT_SECRET='<segreto-jwt-sicuro>'
+JWT_SECRET='<secure-jwt-secret>'
 GROQ_API_KEY='<your-groq-api-key>'
+SERVERLESS_ACCESS_KEY='<serverless-v4-access-key>'   # required to deploy with Serverless Framework v4
 ```
 
-> Copy from `backend/docker.env.example` if it doesn't exist.
+Runtime secrets (`POSTGRESQL_CREDENTIALS`, `JWT_SECRET`, `GROQ_API_KEY`) resolve in a
+**single line** per secret in `backend/serverless.yaml` with SSM-first precedence:
+
+```
+${ssm:/MAINTENANCE-API/<stage>/<NAME>, env:<NAME>, '###'}
+```
+
+1. **Cloud (deploy):** read from SSM Parameter Store (`/MAINTENANCE-API/<stage>/...`).
+2. **Local (`serverless-offline`):** falls back to the `backend/.env` value when the
+   SSM parameter is missing.
+3. **Last resort:** the `'###'` placeholder.
 
 ---
 
@@ -82,8 +96,13 @@ This creates: RDS, S3 buckets (frontend + deploy), IAM roles, SSM parameters.
 
 ```bash
 cd backend
-pnpm run sls-deploy
+pnpm run sls-deploy   # build (swc) + esbuild bundle + serverless deploy --stage DESA
 ```
+
+> Serverless Framework **v4 requires authentication for every command**. Set
+> `SERVERLESS_ACCESS_KEY` in `backend/.env` (or run `serverless login`).
+> Lambdas run on **nodejs24.x** (arm64); the `swagger`/`swaggerJson` packages are
+> slimmed to ~70 KB via per-function packaging (`package.individually` + excludes).
 
 ### 3. Frontend (S3 + CloudFront)
 
@@ -131,12 +150,14 @@ terraform output cloudfront_distribution_id
 │   ├── config/           # Serverless Framework config
 │   ├── test/             # BDD tests (jest-cucumber)
 │   ├── Dockerfile
+│   ├── .nvmrc            # Node.js 24
 │   └── serverless.yaml
 │
 ├── frontend/             # React SPA + Vite + Tailwind
 │   ├── src/              # Components, hooks, services
 │   ├── Dockerfile        # Multi-purpose: build + nginx
 │   ├── nginx.conf        # Nginx SPA configuration
+│   ├── .nvmrc            # Node.js 24
 │   └── docker-entrypoint.sh  # Runtime env var injection
 │
 ├── terraform/            # Infrastructure as Code

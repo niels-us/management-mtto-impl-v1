@@ -1,112 +1,112 @@
-# Respuestas al Proyecto - Maintenance API
+# Project Answers — Maintenance API
 
-## Pregunta 1 — Escalabilidad y Arquitectura en AWS
+## Question 1 — Scalability and AWS Architecture
 
-Ante un aumento significativo de clientes, buques y operaciones de mantenimiento, la arquitectura debe evolucionar de un entorno de desarrollo local hacia una solución de grado empresarial en la nube (AWS). Estos son los pilares clave:
+Faced with a significant increase in customers, vessels and maintenance operations, the architecture must evolve from a local development environment to an enterprise-grade cloud solution (AWS). These are the key pillars:
 
-### 1. Gestión de Conexiones a la Base de Datos (AWS RDS Proxy)
-Dado que el proyecto utiliza **AWS Lambda**, el problema principal al escalar es que cada instancia abre una conexión persistente a PostgreSQL, pudiendo colapsar el motor.
-- **Solución:** Implementar **RDS Proxy** para realizar un "pooling" eficiente de conexiones, permitiendo que miles de Lambdas compartan un número reducido de conexiones a la DB, garantizando estabilidad.
+### 1. Database Connection Management (AWS RDS Proxy)
+Since the project uses **AWS Lambda**, the main scaling problem is that each instance opens a persistent connection to PostgreSQL, which can collapse the engine.
+- **Solution:** Implement **RDS Proxy** to efficiently pool connections, allowing thousands of Lambdas to share a small number of DB connections, ensuring stability.
 
-### 2. Capa de Caching y Lectura (Amazon ElastiCache + Réplicas)
-- **Caching con Redis:** Consultar datos estáticos o maestros (metadata de buques, clientes, tipos de componentes) constantemente golpea al RDS innecesariamente. Usaría **Redis** para cachear estas respuestas, reduciendo la latencia de milisegundos a microsegundos.
-- **Réplicas de Lectura:** Para aliviar la carga de la instancia principal de base de datos, derivaría todas las consultas `GET` de historiales hacia una **Réplica de Lectura**, dejando la instancia primaria exclusivamente para las inserciones y actualizaciones críticas de mantenimiento.
+### 2. Caching and Read Layer (Amazon ElastiCache + Read Replicas)
+- **Redis caching:** Consulting static or master data (vessel metadata, customers, component types) constantly hits RDS unnecessarily. I would use **Redis** to cache these responses, reducing latency from milliseconds to microseconds.
+- **Read replicas:** To relieve the primary database instance, I would route all `GET` history queries to a **Read Replica**, leaving the primary instance exclusively for critical maintenance inserts and updates.
 
-### 3. Procesamiento Asíncrono (AWS SQS + Lambda)
-Operaciones costosas como la subida de documentación técnica masiva o generación de reportes mensuales no deben bloquear la API.
-- **Solución:** Introducir una arquitectura orientada a eventos usando **Amazon SQS**. La API recibe la petición, la encola y vuelve de inmediato al usuario; otra Lambda procesa el trabajo pesado en segundo plano sin degradar la experiencia de usuario.
+### 3. Asynchronous Processing (AWS SQS + Lambda)
+Expensive operations such as massive technical documentation uploads or monthly report generation should not block the API.
+- **Solution:** Introduce an event-driven architecture using **Amazon SQS**. The API receives the request, queues it and returns immediately to the user; another Lambda processes the heavy work in the background without degrading the user experience.
 
-### 4. Seguridad y Robustez de Producción
-- **Arquitectura de Red (VPC):** Aislaría el RDS y las Lambdas en subredes privadas, comunicándose con servicios externos (como S3 para documentación técnica) a través de **VPC Endpoints** para evitar la internet pública.
-- **AWS Secrets Manager:** Eliminaría el uso de archivos `.env` locales para gestionar las credenciales de la DB y las claves JWT de forma segura y rotativa.
+### 4. Production Security and Robustness
+- **Network architecture (VPC):** I would isolate RDS and the Lambdas in private subnets, communicating with external services (such as S3 for technical documentation) through **VPC Endpoints** to avoid the public internet.
 
-- **Containerización local (Docker + Docker Compose):** El entorno de desarrollo completo — aplicación y base de datos — está orquestado con Docker Compose. El container `mtto-app` ejecuta `serverless offline` dentro del container vía `dumb-init`, mientras que `mtto-db` levanta PostgreSQL 15 con el seed automático desde `init.sql` (las contraseñas ya están insertadas con hash bcrypt, sin necesidad de migración manual). El archivo `docker.env` se excluye del control de versiones (`.gitignore`) por seguridad, siguiendo las recomendaciones de GitHub Secret Scanning. Esto elimina dependencias locales de Node.js y garantiza entornos reproducibles entre desarrolladores.
+- **Secrets management:** a step in this direction is already implemented — the runtime secrets (`POSTGRESQL_CREDENTIALS`, `JWT_SECRET`, `GROQ_API_KEY`) are resolved from **SSM Parameter Store with an `env` (local `.env`) fallback**, using a single line per secret in `serverless.yaml`. Moving the secrets to **AWS Secrets Manager** (rotatable) remains a future improvement.
+
+- **Local containerization (Docker + Docker Compose):** The full development environment — application and database — is orchestrated with Docker Compose. The `mtto-app` container runs `serverless offline` (Node.js 24) inside the container via `dumb-init`, while `mtto-db` starts PostgreSQL 15 with automatic seeding from `init.sql` (passwords already bcrypt-hashed, no manual migration required). The `backend/.env` file is excluded from version control (`.gitignore`) for security, following GitHub Secret Scanning recommendations. `SERVERLESS_ACCESS_KEY` (required by Serverless Framework v4 for authentication) is also kept there. This removes local Node.js dependencies and guarantees reproducible environments across developers.
 
 ---
 
+## Question 2 — Technology Choice (FastAPI vs NestJS)
 
-## Pregunta 2 — Elección de Tecnología (FastAPI vs NestJS)
+For a project of this nature (Maintenance API, PostgreSQL, JWT, Serverless deployment), these are the considerations on the two main technologies:
 
-Para un proyecto de estas características (API de Mantenimiento, PostgreSQL, JWT, despliegue Serverless), estas son las consideraciones sobre las dos tecnologías principales:
+### NestJS (Selected Option)
 
-### NestJS (Opción Seleccionada)
+**Advantages:**
+- **Robust Architecture:** Its modular structure and dependency injection keep the code organized, which is vital in long-lived enterprise systems.
+- **Strong Typing (TypeScript):** Provides superior safety when handling complex vessel and maintenance data, reducing runtime errors.
+- **Native Documentation:** Generates OpenAPI (Swagger) specifications in an integrated way, easing frontend integration work.
 
-**Ventajas:**
-- **Arquitectura Robusta:** Su estructura modular y de inyección de dependencias obliga a mantener el código organizado, lo cual es vital en sistemas empresariales de larga duración.
-- **Tipado Fuerte (TypeScript):** Ofrece una seguridad superior en el manejo de datos complejos de buques y mantenimientos, reduciendo errores en tiempo de ejecución.
-- **Documentación Nativa:** Genera especificaciones OpenAPI (Swagger) de forma muy integrada, facilitando el trabajo de integración con el frontend.
-
-**Desventajas:**
-- **Curva de Aprendizaje:** Es más compleja que FastAPI debido a su arquitectura inspirada en Angular (decoradores, módulos, DI).
-- **Sobrecarga (Boilerplate):** Requiere escribir más código inicial para tareas simples en comparación con frameworks más directos.
+**Disadvantages:**
+- **Learning Curve:** It is more complex than FastAPI due to its Angular-inspired architecture (decorators, modules, DI).
+- **Overhead (Boilerplate):** Requires more initial code for simple tasks compared to more straightforward frameworks.
 
 ---
 
 ### FastAPI (Python)
 
-**Ventajas:**
-- **Rendimiento Extremo:** Es uno de los frameworks más rápidos para Python, con soporte nativo de `async/await`.
-- **Rapidez de Desarrollo:** Permite crear endpoints funcionales con mucho menos código y boilerplate.
-- **Cold Starts:** Al ser un entorno más ligero que Node.js + NestJS, las Lambdas suelen arrancar más rápido.
+**Advantages:**
+- **Extreme Performance:** One of the fastest frameworks for Python, with native `async/await` support.
+- **Development Speed:** Allows building functional endpoints with much less code and boilerplate.
+- **Cold Starts:** Being a lighter environment than Node.js + NestJS, Lambdas usually start faster.
 
-**Desventajas:**
-- **Falta de Estructura Forzada:** Si el equipo no es disciplinado, es fácil que el proyecto pierda cohesión arquitectónica (se vuelva "espagueti") al no imponer capas como NestJS.
-- **Ecosistema de Tipado:** Aunque usa hints de Python, no es tan robusto como el sistema de tipos de TypeScript en grandes bases de código.
+**Disadvantages:**
+- **Lack of Enforced Structure:** If the team is not disciplined, the project can easily lose architectural cohesion (become "spaghetti") by not imposing layers like NestJS.
+- **Typing Ecosystem:** Although it uses Python hints, it is not as robust as the TypeScript type system in large codebases.
 
-### Conclusión
-Aunque **FastAPI** es una excelente opción por su velocidad, para una **API de Mantenimiento** que requiere escalabilidad y mantenibilidad por parte de múltiples desarrolladores a largo plazo, **NestJS** es la elección ganadora por la rigidez de su arquitectura y la seguridad que aporta TypeScript.
+### Conclusion
+Although **FastAPI** is an excellent option for its speed, for a **Maintenance API** that requires scalability and maintainability by multiple developers over the long term, **NestJS** is the winning choice because of the rigidity of its architecture and the security that TypeScript provides.
 
 ---
 
-## Pregunta 3 — Bonificación por IA/LLM
+## Question 3 — AI/LLM Bonus
 
-Esta funcionalidad fue desarrollada e implementada en el proyecto como parte de la entrega, a través del endpoint `POST /DESA/V1/maintenance/query-ai`.
+This functionality was developed and implemented in the project as part of the deliverable, through the endpoint `POST /DESA/V1/maintenance/query-ai`.
 
-### Configuración del LLM
+### LLM Configuration
 
-| Parámetro | Valor |
+| Parameter | Value |
 |---|---|
-| Proveedor | Groq |
-| Modelo | `llama-3.3-70b-versatile` |
-| Temperatura | `0.3` (respuestas precisas y controladas) |
+| Provider | Groq |
+| Model | `llama-3.3-70b-versatile` |
+| Temperature | `0.3` (precise and controlled answers) |
 | Max tokens | `1000` |
-| Timeout por request | `30 000 ms` |
-| Reintentos automáticos | `3` intentos con `1 000 ms` de espera entre cada uno |
-| Rate limit (referencia) | `10 req/min`, `100 req/hora` |
+| Timeout per request | `30 000 ms` |
+| Automatic retries | `3` attempts with `1 000 ms` wait between each |
+| Rate limit (reference) | `10 req/min`, `100 req/hour` |
 
-### Enfoque Arquitectónico: LLM Contextual con datos reales de la BD
+### Architectural Approach: Contextual LLM with real DB data
 
-En lugar de una arquitectura RAG completa con base de datos vectorial (que requeriría infraestructura adicional como Pinecone o pgvector), se optó por un enfoque pragmático de **LLM con contexto dinámico**: el backend recopila en tiempo real los datos del cliente desde la base de datos y los inyecta como contexto al LLM (Groq) junto con la pregunta del usuario.
+Instead of a full RAG architecture with a vector database (which would require additional infrastructure such as Pinecone or pgvector), a pragmatic **LLM with dynamic context** approach was chosen: the backend collects the customer's data from the database in real time and injects it as context to the LLM (Groq) together with the user's question.
 
-El flujo de una consulta es el siguiente:
-1. El técnico envía una pregunta en lenguaje natural al endpoint.
-2. El backend extrae el `customerId` del JWT del usuario.
-3. Se consulta la BD obteniendo únicamente los buques, componentes y mantenimientos de ese cliente.
-4. `AIPromptBuilder` formatea ese contexto (buques, componentes, historial) y construye el prompt final.
-5. `AIConstants.getSystemPrompt()` detecta automáticamente el idioma de la pregunta (Italiano o Inglés) y selecciona el system prompt correspondiente.
-6. La respuesta del LLM, junto con la `question` original, el `timestamp` y el `processingTimeMs`, se devuelven al técnico.
+The flow of a query is as follows:
+1. The technician sends a natural-language question to the endpoint.
+2. The backend extracts the `customerId` from the user's JWT.
+3. The DB is queried to obtain only that customer's vessels, components and maintenances.
+4. `AIPromptBuilder` formats that context (vessels, components, history) and builds the final prompt.
+5. `AIConstants.getSystemPrompt()` automatically detects the language of the question (Italian or English) and selects the corresponding system prompt.
+6. The LLM's response, together with the original `question`, the `timestamp` and the `processingTimeMs`, is returned to the technician.
 
-### Soporte Multilingüe
+### Multilingual Support
 
-El sistema detecta automáticamente el idioma de la pregunta mediante análisis de palabras clave (`AIConstants.LANGUAGE_KEYWORDS`) y selecciona el system prompt apropiado:
-- **Italiano:** activado por palabras clave como `imbarcazioni`, `manutenzione`, `cronologia`, etc.
-- **Inglés:** idioma por defecto si no se detectan keywords en italiano.
+The system automatically detects the language of the question through keyword analysis (`AIConstants.LANGUAGE_KEYWORDS`) and selects the appropriate system prompt:
+- **Italian:** enabled by keywords such as `imbarcazioni`, `manutenzione`, `cronologia`, etc.
+- **English:** default language if no Italian keywords are detected.
 
-Esto permite que técnicos de diferentes países interactúen con el sistema en su idioma nativo sin configuración adicional.
+This allows technicians from different countries to interact with the system in their native language without additional configuration.
 
-### Cómo se garantizan los 4 pilares:
+### How the 4 pillars are guaranteed:
 
-**Separación de datos entre clientes (Multi-tenancy)**
-El `AIQueryController` extrae el `customerId` del JWT y lo usa como filtro obligatorio en cada consulta a la base de datos (`gatherMaintenanceContext(customerId)`). Es arquitectónicamente imposible que un técnico de un cliente reciba contexto de datos de otro cliente.
+**Data separation between customers (Multi-tenancy)**
+The `AIQueryController` extracts the `customerId` from the JWT and uses it as a mandatory filter in every database query (`gatherMaintenanceContext(customerId)`). It is architecturally impossible for a technician of one customer to receive context data from another customer.
 
-**Control de acceso**
-Antes de procesar cualquier consulta, el controller valida que el JWT contenga un `customerId` válido, retornando un `401 Unauthorized` si el token no está presente o es inválido. El acceso al endpoint requiere autenticación JWT en todos los casos.
+**Access control**
+Before processing any query, the controller validates that the JWT contains a valid `customerId`, returning `401 Unauthorized` if the token is missing or invalid. Access to the endpoint requires JWT authentication in all cases.
 
-**Trazabilidad de las respuestas**
-Cada respuesta incluye en su estructura: la `question` original formulada, el `timestamp` exacto de la consulta, el `processingTimeMs` del tiempo de procesamiento, y la fuente de datos (`dataSource: "database"`). Adicionalmente, el logger registra cada consulta con el `customerId`, permitiendo auditoría completa en CloudWatch en producción.
+**Traceability of answers**
+Each answer includes in its structure: the original `question` asked, the exact `timestamp` of the query, the `processingTimeMs` processing time, and the data source (`dataSource: "database"`). Additionally, the logger records each query with the `customerId`, allowing full auditing in CloudWatch in production.
 
-**Fiabilidad del sistema**
-El `AIMaintenanceService` verifica que el LLM esté disponible antes de procesar (`llmProvider.isConfigured()`). El `GroqLLMProvider` implementa un mecanismo de **reintentos automáticos** (3 intentos con 1s de espera) para absorber fallos transitorios de la API de Groq. El `system prompt` instruye explícitamente al modelo a responder únicamente con los datos de contexto provistos, evitando alucinaciones. En caso de error del LLM o de la BD, el sistema retorna una respuesta de error controlada sin exponer detalles internos al cliente.
+**System reliability**
+The `AIMaintenanceService` verifies that the LLM is available before processing (`llmProvider.isConfigured()`). The `GroqLLMProvider` implements an **automatic retry** mechanism (3 attempts with 1s wait) to absorb transient Groq API failures. The `system prompt` explicitly instructs the model to answer only with the provided context data, avoiding hallucinations. In case of LLM or DB errors, the system returns a controlled error response without exposing internal details to the client.
 
-### Mejora futura: Arquitectura RAG completa
-Para escalar esta funcionalidad a documentación técnica extensa (manuales, planos, notas de campo), el siguiente paso sería introducir una **base de datos vectorial** (como `pgvector` sobre el mismo PostgreSQL existente) para almacenar embeddings de documentos, filtrando siempre por `client_id` como metadato obligatorio en cada búsqueda de similitud.
+### Future improvement: full RAG architecture
+To scale this functionality to extensive technical documentation (manuals, blueprints, field notes), the next step would be to introduce a **vector database** (such as `pgvector` on the existing PostgreSQL) to store document embeddings, always filtering by `client_id` as a mandatory metadata in every similarity search.

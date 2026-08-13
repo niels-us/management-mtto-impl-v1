@@ -1,47 +1,59 @@
 # MTTO Fleet Manager — Frontend
 
-SPA construida con **React 19 + Vite + TypeScript + Tailwind 4 + TanStack Query + shadcn/ui**, desplegada en **S3 + CloudFront**.
+SPA built with **React 19 + Vite + TypeScript + Tailwind 4 + TanStack Query + shadcn/ui**, deployed to **S3 + CloudFront**.
 
 Stack: React 19, Vite 8, TypeScript 6, Tailwind 4, react-router 7, axios, zod, react-hook-form, recharts, lucide-react.
 
-## Arquitectura (FSD — Feature-Sliced Design)
+## Architecture (FSD — Feature-Sliced Design)
 
-La aplicación sigue **Feature-Sliced Design** en su variante reducida. El código se organiza en capas con **dependencias unidireccionales** (de la capa superior a la inferior):
+The application follows **Feature-Sliced Design** in its reduced variant. The code is organized in layers with **unidirectional dependencies** (from the top layer down):
 
 ```
 app/       → pages/ → features/ → entities/ → shared/
 ```
 
-| Capa | Contenido | Importa de |
+| Layer | Content | Imports from |
 |---|---|---|
-| `app/` | Entry, providers, router, layouts, estilos globales | pages, features, entities, shared |
-| `pages/` | 1 página por ruta (solo composición) | features, entities, shared |
-| `features/` | Capacidades de negocio: `auth`, `vessels`, `components`, `maintenance`, `ai` — cada una con su `api.ts`, `hooks.ts` y `model.ts` propios | entities, shared |
-| `entities/` | Entidades de dominio (`vessel`, `component`, `maintenance`) con tipos + schemas zod | shared |
-| `shared/` | Infraestructura reutilizable: `api/` (cliente axios), `ui/` (shadcn), `lib/`, `contracts/` | (nada) |
+| `app/` | Entry, providers, router, layouts, global styles | pages, features, entities, shared |
+| `pages/` | One page per route (composition only) | features, entities, shared |
+| `features/` | Business capabilities: `auth`, `vessels`, `components`, `maintenance`, `ai` — each with its own `api.ts`, `hooks.ts` and `model.ts` | entities, shared |
+| `entities/` | Domain entities (`vessel`, `component`, `maintenance`) with types + zod schemas | shared |
+| `shared/` | Reusable infrastructure: `api/` (axios client), `ui/` (shadcn), `lib/`, `contracts/` | (nothing) |
 
-### Reglas de capas (convención, se respeta en code review)
+### Layer rules (convention, enforced in code review)
 
-1. Las dependencias fluyen **solo hacia abajo**: `app → pages → features → entities → shared`.
-2. **Ninguna capa inferior importa de una superior** (ej.: `shared/` nunca importa de `features/`).
-3. **Las features no se importan entre sí.** La comunicación entre features se hace vía `entities/` o `shared/`.
-4. Las páginas **solo componen**; la lógica de datos vive en los hooks de cada feature.
+1. Dependencies flow **only downwards**: `app → pages → features → entities → shared`.
+2. **No lower layer imports from a higher one** (e.g. `shared/` never imports from `features/`).
+3. **Features do not import each other.** Communication between features happens via `entities/` or `shared/`.
+4. Pages **only compose**; data logic lives in each feature's hooks.
 
-### Aliases de importación
+### Import aliases
 
-Configurados en `tsconfig.app.json` y `vite.config.ts`:
+Configured in `tsconfig.app.json` and `vite.config.ts`:
 
 - `@app/*`, `@pages/*`, `@features/*`, `@entities/*`, `@shared/*`
 
-### Estado y data-fetching
+### State and data fetching
 
-- **Server state:** TanStack Query (queries/mutations) en `features/*/hooks.ts`, consumiendo `features/*/api.ts`.
-- **Estado de sesión:** `AuthContext` en `features/auth/auth-context.tsx`.
-- **Validación:** schemas `zod` en `entities/*/model.ts` (fuente única reutilizada por formularios).
+- **Server state:** TanStack Query (queries/mutations) in `features/*/hooks.ts`, consuming `features/*/api.ts`.
+- **Session state:** `AuthContext` in `features/auth/auth-context.tsx`.
+- **Validation:** `zod` schemas in `entities/*/model.ts` (single source reused by forms).
 
 ### Code-splitting
 
-Las páginas se cargan de forma perezosa (`React.lazy`) en `app/router.tsx` → el bundle principal no incluye las páginas.
+Pages are loaded lazily (`React.lazy`) in `app/router.tsx` → the main bundle does not include the pages. Rollup emits one chunk per route plus shared FSD/UI chunks, so the initial load only downloads `index.html` + entry + CSS and the rest loads on demand.
+
+## Versions and Tooling
+
+- Node.js **24** pinned via `.nvmrc` and `engines.node = ^24.0.0`; Docker image is `node:24-alpine`.
+- Package manager: `pnpm 10` (`packageManager: pnpm@10.33.0`).
+- Build: `tsc -b && vite build` (SWC via `@vitejs/plugin-react-swc`).
+
+## Testing
+
+- **Unit/component tests:** Vitest + Testing Library with **jsdom 30** (`testTimeout: 15000`, configured in `vite.config.ts`).
+- **BDD tests:** jest-cucumber (`*.feature` + step definitions).
+- Run: `pnpm test` (`vitest run`) or `pnpm test:coverage`. Coverage thresholds are 80% (statements, branches, functions, lines).
 
 ## React Compiler
 
