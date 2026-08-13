@@ -36,25 +36,25 @@ export default function DashboardPage() {
       title: 'Total Vessels',
       value: vessels?.length ?? 0,
       icon: Ship,
-      color: 'text-blue-600 bg-blue-100',
+      color: 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-500/20',
     },
     {
       title: 'Pending',
       value: pending,
       icon: Clock,
-      color: 'text-yellow-600 bg-yellow-100',
+      color: 'text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-500/20',
     },
     {
       title: 'In Progress',
       value: inProgress,
       icon: AlertTriangle,
-      color: 'text-orange-600 bg-orange-100',
+      color: 'text-orange-600 bg-orange-100 dark:text-orange-400 dark:bg-orange-500/20',
     },
     {
       title: 'Completed',
       value: completed,
       icon: CheckCircle,
-      color: 'text-green-600 bg-green-100',
+      color: 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-500/20',
     },
   ];
 
@@ -130,12 +130,12 @@ export default function DashboardPage() {
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs font-medium ${
                         m.status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-300'
                           : m.status === 'in_progress'
-                          ? 'bg-blue-100 text-blue-800'
+                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300'
                           : m.status === 'completed'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-gray-100 text-gray-800'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-300'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-500/20 dark:text-gray-300'
                       }`}
                     >
                       {m.status.replace('_', ' ')}

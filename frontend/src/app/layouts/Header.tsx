@@ -1,11 +1,12 @@
 import { useAuth } from '@features/auth/auth-context';
+import { ThemeToggle } from '@shared/ui/theme-toggle';
 
 export function Header() {
   const { user } = useAuth();
   const displayName = user?.username || user?.sub || 'User';
 
   return (
-    <header className="flex h-14 items-center justify-end border-b bg-background px-6">
+    <header className="flex h-14 items-center justify-end gap-4 border-b bg-background px-6">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <span className="font-medium text-foreground">{displayName}</span>
         {user?.role && (
@@ -14,6 +15,7 @@ export function Header() {
           </span>
         )}
       </div>
+      <ThemeToggle />
     </header>
   );
 }
