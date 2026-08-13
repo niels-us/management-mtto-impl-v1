@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import Groq from 'groq-sdk';
+import type Groq from 'groq-sdk';
 import type { LLMProvider } from './LLMProvider.js';
 import { AIConstants } from '../constants/AIConstants.js';
 import CustomException from '../application/exception/CustomException.js';
@@ -9,12 +9,13 @@ export class GroqLLMProvider implements LLMProvider {
   private readonly logger = new Logger(GroqLLMProvider.name);
   private groqClient: Groq;
   private isReady = false;
+  private initPromise: Promise<void>;
 
   constructor() {
-    this.initializeClient();
+    this.initPromise = this.initializeClient();
   }
 
-  private initializeClient(): void {
+  private async initializeClient(): Promise<void> {
     try {
       const apiKey = process.env.GROQ_API_KEY;
 
@@ -24,7 +25,8 @@ export class GroqLLMProvider implements LLMProvider {
         return;
       }
 
-      this.groqClient = new Groq({ apiKey });
+      const { default: GroqClient } = await import('groq-sdk');
+      this.groqClient = new GroqClient({ apiKey });
       this.isReady = true;
       this.logger.log('Groq LLM Provider initialized successfully');
     } catch (error) {
@@ -34,6 +36,10 @@ export class GroqLLMProvider implements LLMProvider {
   }
 
   async query(systemPrompt: string, userPrompt: string): Promise<string> {
+    if (this.initPromise) {
+      await this.initPromise;
+    }
+
     if (!this.isReady || !this.groqClient) {
       throw new CustomException({
         code: 'AI_001',
