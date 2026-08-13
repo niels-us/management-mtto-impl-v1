@@ -1,15 +1,14 @@
 service: maintenance-api
 
-frameworkVersion: '3'
-configValidationMode: error
-deprecationNotificationMode: error
+frameworkVersion: '4'
+configValidationMode: warn
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs24.x
   stage: ${opt:stage,'DESA'}
   region: ${self:custom.regions.code.${opt:stage}}
-  timeout: 30
+  timeout: 29
   memorySize: 512
   versionFunctions: false
   logRetentionInDays: 30

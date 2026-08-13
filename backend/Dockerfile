@@ -1,6 +1,6 @@
-# Dockerfile - Node.js 20 + TypeScript (Serverless Offline)
+# Dockerfile - Node.js 24 + TypeScript (Serverless Offline)
 
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 
@@ -12,6 +12,9 @@ COPY package.json pnpm-lock.yaml .npmrc ./
 
 # Instalar todas las dependencias (incluidas devDependencies para serverless-offline)
 RUN corepack enable && pnpm install --frozen-lockfile
+
+# Pre-descargar el binario sf-core de Serverless v4 (queda horneado en la imagen, evita re-descarga en runtime)
+RUN pnpm exec serverless --version
 
 # Copiar código y configuración
 COPY tsconfig.json ./

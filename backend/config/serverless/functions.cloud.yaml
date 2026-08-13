@@ -102,6 +102,14 @@ swagger:
   memorySize: 256
   description: Swagger UI Documentation
   role: ${self:custom.role.${opt:stage}}
+  package:
+    patterns:
+      - '!dist-bundle/App.js'
+      - '!dist-bundle/chunk-*.js'
+      - '!dist-bundle/groq-sdk-*.js'
+      - '!dist-bundle/fileFromPath-*.js'
+      - '!node_modules/bcrypt/**'
+      - '!node_modules/node-gyp-build/**'
   events:
     - http:
         path: /swagger
@@ -115,6 +123,14 @@ swaggerJson:
   memorySize: 256
   description: OpenAPI Specification JSON
   role: ${self:custom.role.${opt:stage}}
+  package:
+    patterns:
+      - '!dist-bundle/App.js'
+      - '!dist-bundle/chunk-*.js'
+      - '!dist-bundle/groq-sdk-*.js'
+      - '!dist-bundle/fileFromPath-*.js'
+      - '!node_modules/bcrypt/**'
+      - '!node_modules/node-gyp-build/**'
   events:
     - http:
         path: /swagger.json

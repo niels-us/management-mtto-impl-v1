@@ -4,11 +4,14 @@
   "description": "Arquetipo template basado en typescript - api rest",
   "type": "module",
   "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": "^24.0.0"
+  },
   "scripts": {
     "build": "pnpm run typecheck && swc src -d dist --strip-leading-paths",
     "build:dev": "swc src -d dist --strip-leading-paths",
     "typecheck": "tsc --noEmit",
-    "bundle": "esbuild dist/maintenances/infrastructure/bootstrap/App.js --bundle --platform=node --target=node20 --format=esm --minify --splitting --outdir=dist-bundle --outbase=dist/maintenances/infrastructure/bootstrap --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\" --log-level=warning && esbuild dist/common/infrastructure/swagger/SwaggerHandler.js --bundle --platform=node --target=node20 --format=esm --minify --outfile=dist-bundle/SwaggerHandler.js --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\" --log-level=warning",
+    "bundle": "esbuild dist/maintenances/infrastructure/bootstrap/App.js --bundle --platform=node --target=node24 --format=esm --minify --splitting --outdir=dist-bundle --outbase=dist/maintenances/infrastructure/bootstrap --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\" --log-level=warning && esbuild dist/common/infrastructure/swagger/SwaggerHandler.js --bundle --platform=node --target=node24 --format=esm --minify --outfile=dist-bundle/SwaggerHandler.js --external:bcrypt --external:pg-native --external:@nestjs/microservices --external:@nestjs/platform-express --external:@nestjs/websockets --external:@nestjs/websockets/socket-module --external:class-transformer --external:class-validator --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\" --log-level=warning",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "set IS_AUTH_IAM=true && pnpm run build && serverless offline start --stage DESA --param=\"functionsFile=local\" --httpPort 3001",
     "start:docker": "node dist/maintenances/infrastructure/bootstrap/App.js",
@@ -35,7 +38,7 @@
     "@types/aws-lambda": "8.10.161",
     "@types/jest": "29.5.11",
     "@types/jsonwebtoken": "9.0.8",
-    "@types/node": "20.10.4",
+    "@types/node": "^24.0.0",
     "@types/pg": "^8.12.0",
     "@types/uuid": "9.0.8",
     "esbuild": "^0.28.1",
@@ -43,8 +46,8 @@
     "jest-cucumber": "3.0.1",
     "nodemon": "^3.1.14",
     "prettier": "3.1.0",
-    "serverless": "3.40.0",
-    "serverless-offline": "13.8.3",
+    "serverless": "4.41.0",
+    "serverless-offline": "14.8.0",
     "serverless-plugin-reducer": "4.0.1",
     "typescript": "5.3.3"
   },
