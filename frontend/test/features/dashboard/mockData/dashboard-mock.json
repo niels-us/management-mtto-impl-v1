@@ -1,0 +1,56 @@
+{
+  "vessels": [
+    {
+      "id": "v1",
+      "name": "Titan",
+      "registrationNumber": "ABC-123",
+      "customerId": "c1",
+      "createdAt": "2026-01-10T00:00:00Z"
+    },
+    {
+      "id": "v2",
+      "name": "Orion",
+      "registrationNumber": "XYZ-999",
+      "customerId": "c1",
+      "createdAt": "2026-02-01T00:00:00Z"
+    }
+  ],
+  "maintenance": [
+    {
+      "id": "m1",
+      "componentId": "c1",
+      "customerId": "c1",
+      "description": "Replace filter",
+      "status": "pending",
+      "scheduledAt": "2026-08-15T10:00:00Z",
+      "performedAt": null,
+      "createdBy": "u1",
+      "createdAt": "2026-08-01T10:00:00Z",
+      "updatedAt": null
+    },
+    {
+      "id": "m2",
+      "componentId": "c2",
+      "customerId": "c1",
+      "description": "Inspect pump",
+      "status": "in_progress",
+      "scheduledAt": "2026-08-16T10:00:00Z",
+      "performedAt": null,
+      "createdBy": "u1",
+      "createdAt": "2026-08-02T10:00:00Z",
+      "updatedAt": null
+    },
+    {
+      "id": "m3",
+      "componentId": "c3",
+      "customerId": "c1",
+      "description": "Oil change",
+      "status": "completed",
+      "scheduledAt": "2026-08-10T10:00:00Z",
+      "performedAt": "2026-08-11T10:00:00Z",
+      "createdBy": "u1",
+      "createdAt": "2026-08-03T10:00:00Z",
+      "updatedAt": "2026-08-11T10:00:00Z"
+    }
+  ]
+}

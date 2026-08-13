@@ -1,0 +1,16 @@
+[
+  {
+    "id": "v1",
+    "name": "Titan",
+    "registrationNumber": "ABC-123",
+    "customerId": "c1",
+    "createdAt": "2026-01-10T00:00:00Z"
+  },
+  {
+    "id": "v2",
+    "name": "Orion",
+    "registrationNumber": "XYZ-999",
+    "customerId": "c1",
+    "createdAt": "2026-02-01T00:00:00Z"
+  }
+]

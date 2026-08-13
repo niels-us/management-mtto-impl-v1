@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "question": "How do I fix the pump?",
+  "answer": "Replace the pump gasket.",
+  "dataSource": "manual",
+  "timestamp": "2026-08-13T10:00:00Z",
+  "processingTimeMs": 120,
+  "error": null
+}

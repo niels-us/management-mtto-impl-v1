@@ -1,0 +1,26 @@
+[
+  {
+    "id": "m1",
+    "componentId": "c1",
+    "customerId": "c1",
+    "description": "Replace filter",
+    "status": "pending",
+    "scheduledAt": "2026-08-15T10:00:00Z",
+    "performedAt": null,
+    "createdBy": "u1",
+    "createdAt": "2026-08-01T10:00:00Z",
+    "updatedAt": null
+  },
+  {
+    "id": "m2",
+    "componentId": "c2",
+    "customerId": "c1",
+    "description": "Oil change",
+    "status": "completed",
+    "scheduledAt": "2026-08-10T10:00:00Z",
+    "performedAt": "2026-08-11T10:00:00Z",
+    "createdBy": "u1",
+    "createdAt": "2026-08-01T10:00:00Z",
+    "updatedAt": "2026-08-11T10:00:00Z"
+  }
+]
