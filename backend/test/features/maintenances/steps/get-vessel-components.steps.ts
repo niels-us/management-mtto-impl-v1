@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import { Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
@@ -100,8 +100,8 @@ defineFeature(feature, (test) => {
         mockComponents = [new Component(componentData)];
       }
       
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -227,8 +227,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -287,8 +287,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -336,8 +336,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -383,8 +383,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -431,8 +431,8 @@ defineFeature(feature, (test) => {
         customerId: 'different-customer',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with different customer JWT token', async () => {
@@ -478,8 +478,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -532,8 +532,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -579,8 +579,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {
@@ -631,8 +631,8 @@ defineFeature(feature, (test) => {
         customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b',
         createdAt: new Date()
       });
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(mockVessel);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents);
     });
 
     when('Execute the getVesselComponents action with JWT token', async () => {

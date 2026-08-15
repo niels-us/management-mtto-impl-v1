@@ -1,22 +1,14 @@
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: mtto-db
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    container_name: mtto-dynamodb
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data"
     ports:
-      - "5432:5432"
+      - "8000:8000"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - dynamodbdata:/home/dynamodblocal/data
     networks:
       - mtto-network
 
@@ -30,12 +22,13 @@ services:
       - "3000:3000"
     env_file:
       - ./backend/.env
+    environment:
+      DYNAMODB_ENDPOINT: http://dynamodb-local:8000
     volumes:
       - ./backend/src:/app/src
       - ./backend/serverless.yaml:/app/serverless.yaml
     depends_on:
-      postgres:
-        condition: service_healthy
+      - dynamodb-local
     networks:
       - mtto-network
 
@@ -55,7 +48,7 @@ services:
       - mtto-network
 
 volumes:
-  pgdata:
+  dynamodbdata:
 
 networks:
   mtto-network:

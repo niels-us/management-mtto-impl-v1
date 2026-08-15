@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import { Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
@@ -80,7 +80,7 @@ defineFeature(feature, (test) => {
           serialNumber: 'ENG-001',
           installedAt: new Date()
         });
-        jest.spyOn(MaintenancePostgreRepository.prototype, 'findById').mockResolvedValue(mockComponent);
+        jest.spyOn(MaintenanceDynamoRepository.prototype, 'findById').mockResolvedValue(mockComponent);
       }
     });
 
@@ -89,7 +89,7 @@ defineFeature(feature, (test) => {
       request.headers = { Authorization: `Bearer ${token}` };
       
       // Mock the createMaintenance method
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'createMaintenance').mockResolvedValue(
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'createMaintenance').mockResolvedValue(
         new Maintenance({
           id: 'a9b8c7d6-e5f4-4c3b-8a97-6e5f4d3c2b1a',
           componentId: 'c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b',
@@ -251,7 +251,7 @@ defineFeature(feature, (test) => {
 
     and('Component does not exist in repository', async () => {
       // Mock findById to return null for non-existent component
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findById').mockResolvedValue(null);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findById').mockResolvedValue(null);
     });
 
     when('Execute the createMaintenance action with JWT token', async () => {

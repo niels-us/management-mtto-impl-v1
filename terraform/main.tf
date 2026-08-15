@@ -34,9 +34,6 @@ module "backend" {
   region      = var.region
   stage       = var.stage
   account_id  = var.account_id
-  db_name     = var.db_name
-  db_username = var.db_username
-  db_password = var.db_password
   jwt_secret  = var.jwt_secret
   groq_api_key = var.groq_api_key
 }

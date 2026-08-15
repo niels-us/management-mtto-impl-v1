@@ -45,8 +45,9 @@ provider:
     LOG_LEVEL: ${self:custom.logLevel.${opt:stage}, 'INFO'}
     NODE_ENV: ${self:provider.stage}
     SERVICE_NAME: maintenance-api    
-    # Database (from Secrets Manager/Parameter Store)
-    POSTGRESQL_CREDENTIALS: ${ssm:${self:custom.ssmRootPath}/POSTGRESQL_CREDENTIALS, env:POSTGRESQL_CREDENTIALS, '###'} #_SQL
+    # Database (DynamoDB - single table)
+    DYNAMODB_TABLE_NAME: ${ssm:${self:custom.ssmRootPath}/DYNAMODB_TABLE_NAME, env:DYNAMODB_TABLE_NAME, 'mtto-maintenance-desa'} #_DYN
+    DYNAMODB_ENDPOINT: ${param:dynamoEndpoint, ''} # empty in AWS; local offline passes --param=dynamoEndpoint=http://dynamodb-local:8000
     # JWT
     JWT_SECRET: ${ssm:${self:custom.ssmRootPath}/JWT_SECRET, env:JWT_SECRET, '###'} #_JWT
     JWT_AUDIENCE: 'maintenance-api'
@@ -103,7 +104,6 @@ package:
     - '!.dockerignore'
     - '!docker-compose.yml'
     - '!docker.env.example'
-    - '!init.sql'
     - '!README.md'
     - '!ANSWERS.md'
     - '!.prettierrc'

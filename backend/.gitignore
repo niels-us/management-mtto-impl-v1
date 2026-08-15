@@ -187,6 +187,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+# pnpm content-addressable store (cache)
+.pnpm-store/
+
 # TypeScript v1 declaration files
 typings/
 

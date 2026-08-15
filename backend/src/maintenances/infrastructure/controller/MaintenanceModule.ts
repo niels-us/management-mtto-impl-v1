@@ -7,7 +7,7 @@ import { MaintenanceRequestValidation } from '../../application/validation/Maint
 import { MaintenanceApplicationService } from '../../application/service/MaintenanceApplicationService.js';
 import { MaintenanceDomainService } from '../../domain/service/MaintenanceDomainService.js';
 import { AIMaintenanceService } from '../../application/ai/AIMaintenanceService.js';
-import { MaintenancePostgreRepository } from '../repository/MaintenancePostgreRepository.js';
+import { MaintenanceDynamoRepository } from '../repository/MaintenanceDynamoRepository.js';
 import { TenantValidator, TenantValidationGuard, TenantInterceptor } from '../../../common/infrastructure/middleware/index.js';
 import { GroqLLMProvider } from '../../../common/ai/GroqLLMProvider.js';
 import { AIPromptBuilder } from '../../../common/ai/AIPromptBuilder.js';
@@ -32,23 +32,23 @@ import { AIPromptBuilder } from '../../../common/ai/AIPromptBuilder.js';
     },
     {
       provide: 'CustomerRepository',
-      useClass: MaintenancePostgreRepository,
+      useClass: MaintenanceDynamoRepository,
     },
     {
       provide: 'UserRepository',
-      useClass: MaintenancePostgreRepository,
+      useClass: MaintenanceDynamoRepository,
     },
     {
       provide: 'VesselRepository',
-      useClass: MaintenancePostgreRepository,
+      useClass: MaintenanceDynamoRepository,
     },
     {
       provide: 'ComponentRepository',
-      useClass: MaintenancePostgreRepository,
+      useClass: MaintenanceDynamoRepository,
     },
     {
       provide: 'MaintenanceRepository',
-      useClass: MaintenancePostgreRepository,
+      useClass: MaintenanceDynamoRepository,
     },
   ],
 })

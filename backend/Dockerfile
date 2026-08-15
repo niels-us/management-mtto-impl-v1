@@ -25,6 +25,7 @@ COPY openapi.json ./
 COPY serverless.yaml ./
 COPY jest.config.cjs ./
 COPY test ./test
+COPY scripts ./scripts
 
 # Compilar a dist/ y bundle con esbuild
 RUN pnpm run build
@@ -45,4 +46,4 @@ EXPOSE 3000
 
 # Comando de inicio
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["pnpm", "exec", "serverless", "offline", "start", "--stage", "DESA", "--param=functionsFile=local", "--host", "0.0.0.0"]
+CMD ["pnpm", "exec", "serverless", "offline", "start", "--stage", "DESA", "--param=functionsFile=local", "--param=dynamoEndpoint=http://dynamodb-local:8000", "--host", "0.0.0.0"]

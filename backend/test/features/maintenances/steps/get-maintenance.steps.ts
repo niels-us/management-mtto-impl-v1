@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import { Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
@@ -89,7 +89,7 @@ defineFeature(feature, (test) => {
         mockMaintenances = [new Maintenance(data)];
       }
       
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     when('Execute the getMaintenance action with JWT token', async () => {
@@ -200,7 +200,7 @@ defineFeature(feature, (test) => {
       }
       
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     when('Execute the getMaintenance action with JWT token', async () => {
@@ -273,7 +273,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {
@@ -329,7 +329,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {
@@ -376,7 +376,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {
@@ -420,7 +420,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {
@@ -459,7 +459,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {
@@ -503,7 +503,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {
@@ -547,7 +547,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {
@@ -591,7 +591,7 @@ defineFeature(feature, (test) => {
       const sourceData = getMockData(mockData);
       let data = sourceData[mockObject];
       mockMaintenances = data.map((m: any) => new Maintenance(m));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances);
     });
 
     and(/^Set query parameter status (.*)$/, async (statusValue: string) => {

@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import { Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
@@ -73,7 +73,7 @@ defineFeature(feature, (test) => {
     and(/^Wait for vessel repository response (.*) (.*) (.*)$/, async (status: string, mockData: string, mockObject: string) => {
       const data = getMockData(mockData)[mockObject];
       mockVessels = data.map((v: any) => new Vessel(v));
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByCustomer').mockResolvedValue(mockVessels);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByCustomer').mockResolvedValue(mockVessels);
     });
 
     when('Execute the getVessels action with JWT token', async () => {

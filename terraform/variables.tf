@@ -22,33 +22,10 @@ variable "jwt_secret" {
   sensitive   = true
 }
 
-variable "db_password" {
-  description = "Password for RDS PostgreSQL master user"
-  type        = string
-  sensitive   = true
-
-  validation {
-    condition     = length(var.db_password) >= 8
-    error_message = "db_password must be at least 8 characters."
-  }
-}
-
 variable "groq_api_key" {
   description = "Groq API key from https://console.groq.com"
   type        = string
   sensitive   = true
-}
-
-variable "db_name" {
-  description = "PostgreSQL database name"
-  type        = string
-  default     = "postgres"
-}
-
-variable "db_username" {
-  description = "PostgreSQL master username"
-  type        = string
-  default     = "postgres"
 }
 
 variable "aws_profile" {

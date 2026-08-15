@@ -1,76 +1,3 @@
-data "aws_vpc" "default" {
-  default = true
-}
-
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-
-# ── Security Group ──────────────────────────────
-
-resource "aws_security_group" "rds" {
-  name        = "maintenance-api-rds-${lower(var.stage)}"
-  description = "Allow inbound PostgreSQL for maintenance-api ${var.stage}"
-  vpc_id      = data.aws_vpc.default.id
-
-  ingress {
-    description = "PostgreSQL"
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-# ── RDS PostgreSQL ──────────────────────────────
-
-resource "aws_db_subnet_group" "default" {
-  name       = "maintenance-api-${lower(var.stage)}-subnet-group"
-  subnet_ids = data.aws_subnets.default.ids
-
-  description = "Default subnet group for maintenance-api ${var.stage} RDS"
-}
-
-resource "aws_db_instance" "postgres" {
-  identifier        = "maintenance-api-${lower(var.stage)}"
-  engine            = "postgres"
-  engine_version    = "15"
-  instance_class    = "db.t3.micro"
-  allocated_storage = 20
-  storage_type      = "gp2"
-
-  db_name  = var.db_name
-  username = var.db_username
-  password = var.db_password
-
-  db_subnet_group_name   = aws_db_subnet_group.default.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  publicly_accessible    = true
-
-  multi_az = false
-
-  backup_retention_period = 0
-  backup_window           = "03:00-04:00"
-  maintenance_window      = "Mon:04:00-Mon:05:00"
-
-  skip_final_snapshot = true
-  deletion_protection = false
-
-  auto_minor_version_upgrade = true
-
-  ca_cert_identifier = "rds-ca-rsa2048-g1"
-}
-
 # ── S3 (Serverless deployment artifacts) ─────────
 
 resource "aws_s3_bucket" "deployment" {
@@ -106,6 +33,83 @@ resource "aws_s3_bucket_versioning" "deployment" {
 
   versioning_configuration {
     status = "Enabled"
+  }
+}
+
+# ── DynamoDB (single-table design) ─────────────
+
+resource "aws_dynamodb_table" "maintenance" {
+  name         = "mtto-maintenance-${lower(var.stage)}"
+  billing_mode = "PAY_PER_REQUEST"
+
+  hash_key = "PK"
+  range_key = "SK"
+
+  attribute {
+    name = "PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "SK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI1PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI1SK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI2PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI2SK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI3PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI3SK"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "GSI1"
+    hash_key        = "GSI1PK"
+    range_key       = "GSI1SK"
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "GSI2"
+    hash_key        = "GSI2PK"
+    range_key       = "GSI2SK"
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "GSI3"
+    hash_key        = "GSI3PK"
+    range_key       = "GSI3SK"
+    projection_type = "ALL"
+  }
+
+  tags = {
+    Environment = var.stage
+    Project     = "MaintenanceAPI"
+    ManagedBy   = "Terraform"
   }
 }
 
@@ -163,6 +167,25 @@ resource "aws_iam_role_policy" "lambda_exec_policy" {
           "ssm:GetParametersByPath"
         ]
         Resource = "arn:aws:ssm:${var.region}:${var.account_id}:parameter/MAINTENANCE-API/${var.stage}/*"
+      },
+      {
+        Sid    = "DynamoDBAccess"
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:DescribeTable",
+          "dynamodb:BatchWriteItem",
+          "dynamodb:BatchGetItem"
+        ]
+        Resource = [
+          aws_dynamodb_table.maintenance.arn,
+          "${aws_dynamodb_table.maintenance.arn}/index/*",
+        ]
       }
     ]
   })
@@ -172,18 +195,6 @@ resource "aws_iam_role_policy" "lambda_exec_policy" {
 
 locals {
   ssm_root = "/MAINTENANCE-API/${var.stage}"
-
-  postgresql_credentials = jsonencode({
-    host                   = aws_db_instance.postgres.address
-    port                   = 5432
-    database               = var.db_name
-    user                   = var.db_username
-    password               = var.db_password
-    ssl                    = { rejectUnauthorized = false }
-    max                    = 5
-    idleTimeoutMillis      = 30000
-    connectionTimeoutMillis = 2000
-  })
 }
 
 resource "aws_ssm_parameter" "jwt_secret" {
@@ -197,13 +208,11 @@ resource "aws_ssm_parameter" "jwt_secret" {
   }
 }
 
-resource "aws_ssm_parameter" "postgresql_credentials" {
-  name        = "${local.ssm_root}/POSTGRESQL_CREDENTIALS"
-  description = "PostgreSQL connection credentials for maintenance-api ${var.stage}"
+resource "aws_ssm_parameter" "dynamodb_table_name" {
+  name        = "${local.ssm_root}/DYNAMODB_TABLE_NAME"
+  description = "DynamoDB table name for maintenance-api ${var.stage}"
   type        = "String"
-  value       = local.postgresql_credentials
-
-  depends_on = [aws_db_instance.postgres]
+  value       = aws_dynamodb_table.maintenance.name
 }
 
 resource "aws_ssm_parameter" "groq_api_key" {

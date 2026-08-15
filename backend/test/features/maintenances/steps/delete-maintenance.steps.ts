@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import * as jwt from 'jsonwebtoken';
 import { Maintenance } from '../../../../src/maintenances/domain/entities/Maintenance';
 import { buildRequest, getInputPayload } from '../util/AwsTestHelper';
@@ -73,8 +73,8 @@ defineFeature(feature, (test) => {
     });
 
     and('The maintenance repository has the maintenance record', () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceById').mockResolvedValue(existingMaintenance);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'deleteMaintenance').mockResolvedValue(true);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceById').mockResolvedValue(existingMaintenance);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'deleteMaintenance').mockResolvedValue(true);
     });
 
     when('Execute the deleteMaintenance action with JWT token', async () => {
@@ -159,7 +159,7 @@ defineFeature(feature, (test) => {
     });
 
     and('The maintenance repository returns no record', () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceById').mockResolvedValue(null);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceById').mockResolvedValue(null);
     });
 
     when('Execute the deleteMaintenance action with JWT token', async () => {

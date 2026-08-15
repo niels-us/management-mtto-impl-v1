@@ -1,13 +1,3 @@
-output "rds_endpoint" {
-  description = "RDS PostgreSQL endpoint (host)"
-  value       = aws_db_instance.postgres.address
-}
-
-output "rds_port" {
-  description = "RDS PostgreSQL port"
-  value       = aws_db_instance.postgres.port
-}
-
 output "iam_role_arn" {
   description = "IAM Role ARN for Lambda"
   value       = aws_iam_role.lambda_exec.arn
@@ -18,9 +8,19 @@ output "s3_deployment_bucket" {
   value       = aws_s3_bucket.deployment.id
 }
 
-output "ssm_postgresql_path" {
-  description = "SSM path for PostgreSQL credentials"
-  value       = aws_ssm_parameter.postgresql_credentials.name
+output "dynamodb_table_name" {
+  description = "DynamoDB table name"
+  value       = aws_dynamodb_table.maintenance.name
+}
+
+output "dynamodb_table_arn" {
+  description = "DynamoDB table ARN"
+  value       = aws_dynamodb_table.maintenance.arn
+}
+
+output "ssm_dynamodb_table_path" {
+  description = "SSM path for the DynamoDB table name"
+  value       = aws_ssm_parameter.dynamodb_table_name.name
 }
 
 output "ssm_jwt_secret_path" {

@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import { GroqLLMProvider } from '../../../../src/common/ai/GroqLLMProvider';
 import { Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
@@ -88,18 +88,18 @@ defineFeature(feature, (test) => {
   const givenRepositoriesWithData = (given: any) => {
     given('The repositories return vessels, components and maintenances for the customer', () => {
       const vessels = mockVessels();
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByCustomer').mockResolvedValue(vessels);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(vessels[0]);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents());
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances());
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByCustomer').mockResolvedValue(vessels);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(vessels[0]);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue(mockComponents());
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue(mockMaintenances());
     });
   };
 
   const givenRepositoriesEmpty = (given: any) => {
     given('The repositories return no vessels for the customer', () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByCustomer').mockResolvedValue([]);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue([]);
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue([]);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByCustomer').mockResolvedValue([]);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue([]);
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceByCustomer').mockResolvedValue([]);
     });
   };
 

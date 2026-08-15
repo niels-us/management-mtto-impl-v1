@@ -1,11 +1,11 @@
-output "rds_endpoint" {
-  description = "RDS PostgreSQL endpoint (host). Use this to verify connection."
-  value       = module.backend.rds_endpoint
+output "dynamodb_table_name" {
+  description = "DynamoDB table name. Used to set DYNAMODB_TABLE_NAME."
+  value       = module.backend.dynamodb_table_name
 }
 
-output "rds_port" {
-  description = "RDS PostgreSQL port"
-  value       = module.backend.rds_port
+output "dynamodb_table_arn" {
+  description = "DynamoDB table ARN"
+  value       = module.backend.dynamodb_table_arn
 }
 
 output "iam_role_arn" {
@@ -18,9 +18,9 @@ output "s3_deployment_bucket" {
   value       = module.backend.s3_deployment_bucket
 }
 
-output "ssm_postgresql_path" {
-  description = "SSM path for PostgreSQL credentials"
-  value       = module.backend.ssm_postgresql_path
+output "ssm_dynamodb_table_path" {
+  description = "SSM path for the DynamoDB table name"
+  value       = module.backend.ssm_dynamodb_table_path
 }
 
 output "frontend_bucket_name" {
@@ -41,24 +41,25 @@ output "cloudfront_distribution_id" {
 output "next_steps" {
   description = "Steps to complete deployment after terraform apply"
   value       = <<-EOT
-    1. Run init.sql on RDS:
-       PGPASSWORD=<db_password> psql -h ${module.backend.rds_endpoint} -U postgres -d kfinder -f init.sql
+    1. Seed the DynamoDB table (once):
+       cd backend
+       DYNAMODB_TABLE_NAME=${module.backend.dynamodb_table_name} pnpm run seed:dynamo
 
-    2. Update serverless.yaml — uncomment SSM references:
-       JWT_SECRET:               ${module.backend.ssm_jwt_secret_path}
-       POSTGRESQL_CREDENTIALS:  ${module.backend.ssm_postgresql_path}
-       GROQ_API_KEY:             ${module.backend.ssm_groq_api_key_path}
+    2. Update serverless.yaml — SSM references are already wired:
+       JWT_SECRET:             ${module.backend.ssm_jwt_secret_path}
+       DYNAMODB_TABLE_NAME:    ${module.backend.ssm_dynamodb_table_path}
+       GROQ_API_KEY:           ${module.backend.ssm_groq_api_key_path}
 
     3. Update config/serverless/common-custom-config.yaml:
        role.DESA: ${module.backend.iam_role_arn}
        Remove vpc.DESA block (Lambda runs without VPC)
 
     4. Deploy backend:
-       npm run build && serverless deploy --stage DESA --region us-east-1
+       pnpm run sls-deploy
 
     5. Deploy frontend code to S3 (infra already created):
        cd ../frontend
-       npm run build
+       pnpm run build
        aws s3 sync dist/ s3://${module.frontend.bucket_name}/ --delete
 
     6. (Optional) Invalidate CloudFront cache after frontend deploy:

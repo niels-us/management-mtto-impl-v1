@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../../../src/maintenances/domain/entities/User';
@@ -83,7 +83,7 @@ defineFeature(feature, (test) => {
     });
 
     and('The authentication repository returns a valid user', async () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findByUsername').mockResolvedValue(
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findByUsername').mockResolvedValue(
         new User({
           id: 'user-123',
           username: 'tester',
@@ -129,7 +129,7 @@ defineFeature(feature, (test) => {
     // ─── STEP 2: GET VESSELS ─────────────────────────────────────────────────
 
     and('The vessel repository returns vessels for customer 88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b', async () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByCustomer').mockResolvedValue([
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByCustomer').mockResolvedValue([
         new Vessel({ id: '061658b9-bf29-4e88-b0ec-c92ff540ac99', name: 'Maritime Princess', registrationNumber: 'MP-001', customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b', createdAt: new Date('2024-01-15') }),
         new Vessel({ id: 'd6c5b4a3-f2e1-4d9c-8b7a-6f5e4d3c2b1a', name: 'Ocean Voyager', registrationNumber: 'OV-002', customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b', createdAt: new Date('2024-02-20') })
       ]);
@@ -162,10 +162,10 @@ defineFeature(feature, (test) => {
     // ─── STEP 3: GET VESSEL COMPONENTS ───────────────────────────────────────
 
     and('The vessel and component repositories return data for vessel 061658b9-bf29-4e88-b0ec-c92ff540ac99', async () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findVesselById').mockResolvedValue(
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findVesselById').mockResolvedValue(
         new Vessel({ id: '061658b9-bf29-4e88-b0ec-c92ff540ac99', name: 'Maritime Princess', registrationNumber: 'MP-001', customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b', createdAt: new Date('2024-01-15') })
       );
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findAllByVessel').mockResolvedValue([
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findAllByVessel').mockResolvedValue([
         new Component({ id: 'c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b', name: 'Main Engine', vesselId: '061658b9-bf29-4e88-b0ec-c92ff540ac99', customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b', serialNumber: 'SN-ME-12345', installedAt: new Date('2020-01-15') }),
         new Component({ id: 'component-002', name: 'Water Pump', vesselId: '061658b9-bf29-4e88-b0ec-c92ff540ac99', customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b', serialNumber: 'SN-WP-67890', installedAt: new Date('2021-06-20') })
       ]);
@@ -200,10 +200,10 @@ defineFeature(feature, (test) => {
     // ─── STEP 4: CREATE MAINTENANCE ──────────────────────────────────────────
 
     and('The component and maintenance repositories are ready for creation', async () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findById').mockResolvedValue(
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findById').mockResolvedValue(
         new Component({ id: 'c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b', name: 'Main Engine', vesselId: '061658b9-bf29-4e88-b0ec-c92ff540ac99', customerId: '88c23e8f-b0a4-4d5e-a8c1-8e4c5e6d7a8b', serialNumber: 'SN-ME-12345', installedAt: new Date('2020-01-15') })
       );
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'createMaintenance').mockImplementation(
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'createMaintenance').mockImplementation(
         async (maintenance: Maintenance) => {
           // Simulate DB assigning the ID passed in the entity
           return new Maintenance({
@@ -261,7 +261,7 @@ defineFeature(feature, (test) => {
     // ─── STEP 5: UPDATE MAINTENANCE ──────────────────────────────────────────
 
     and('The maintenance repository is mocked for status update', async () => {
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'findMaintenanceById').mockResolvedValue(
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'findMaintenanceById').mockResolvedValue(
         new Maintenance({
           id: createdMaintenanceId,
           componentId: 'c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b',
@@ -274,7 +274,7 @@ defineFeature(feature, (test) => {
           updatedAt: new Date()
         })
       );
-      jest.spyOn(MaintenancePostgreRepository.prototype, 'updateStatus').mockResolvedValue(
+      jest.spyOn(MaintenanceDynamoRepository.prototype, 'updateStatus').mockResolvedValue(
         new Maintenance({
           id: createdMaintenanceId,
           componentId: 'c4e9f3e8-5c1a-4a2f-8b3c-9a8d7e6f5c4b',

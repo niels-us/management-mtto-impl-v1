@@ -9,3 +9,6 @@ terraform-dev.tfstate.backup
 *.backup
 terraform.tfstate*
 .terraform/
+
+# Vim swap files
+*.swp

@@ -1,6 +1,6 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { handler } from '../../../../src/maintenances/infrastructure/bootstrap/App';
-import { MaintenancePostgreRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenancePostgreRepository';
+import { MaintenanceDynamoRepository } from '../../../../src/maintenances/infrastructure/repository/MaintenanceDynamoRepository';
 import * as bcrypt from 'bcrypt';
 import {
   buildRequest,
@@ -46,9 +46,9 @@ defineFeature(feature, (test) => {
     and(/^Wait for user repository response (.*) (.*) (.*)$/, async (status: string, mockData: string, mockObject: string) => {
       const data = getMockData(mockData)[mockObject];
       if (data) {
-        jest.spyOn(MaintenancePostgreRepository.prototype, 'findByUsername').mockResolvedValue(new User(data));
+        jest.spyOn(MaintenanceDynamoRepository.prototype, 'findByUsername').mockResolvedValue(new User(data));
       } else {
-        jest.spyOn(MaintenancePostgreRepository.prototype, 'findByUsername').mockResolvedValue(null);
+        jest.spyOn(MaintenanceDynamoRepository.prototype, 'findByUsername').mockResolvedValue(null);
       }
     });
 
